@@ -28,19 +28,55 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            button1 = new Button();
+            obraz = new Panel();
+            textBox1 = new TextBox();
+            SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.Location = new Point(591, 12);
+            button1.Name = "button1";
+            button1.Size = new Size(84, 23);
+            button1.TabIndex = 0;
+            button1.Text = "Start";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // obraz
+            // 
+            obraz.Location = new Point(12, 109);
+            obraz.Name = "obraz";
+            obraz.Size = new Size(776, 329);
+            obraz.TabIndex = 1;
+            obraz.Paint += obraz_Paint;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(78, 19);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(132, 23);
+            textBox1.TabIndex = 2;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "Form1";
-            this.Text = "Sand";
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(textBox1);
+            Controls.Add(obraz);
+            Controls.Add(button1);
+            Name = "Form1";
+            Text = "Sand";
+            Load += Form1_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Button button1;
+        private Panel obraz;
+        private TextBox textBox1;
     }
 }
