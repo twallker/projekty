@@ -20,82 +20,87 @@ namespace Piasek
             private int m_waga;
         }
 
-        List<Ziarno> ziarna;
+        //List<Ziarno> ziarna;
+
+        class Swiat
+        {
+            public Swiat(Panel obraz, int liniiPiasku, int wagi)
+            {
+                this.obraz = obraz;
+                iloscZiaren = obraz.Width * liniiPiasku;                
+
+                kolory = new List<Color>(wagi);
+                Random rnd = new Random();
+                for (int i = 0; i < wagi; i++)
+                {
+                    kolory.Add(Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)));
+                }
+
+                ziarna = new List<Ziarno>(iloscZiaren);
+                for (int y = 0; y < liniiPiasku; y++)
+                {
+                    for (int x = 0; x < obraz.Width; x++)
+                    {
+                        int kolorNumber = rnd.Next(wagi);
+                        ziarna.Add(new Ziarno(new Point(x, y), kolory[kolorNumber], kolorNumber));
+                    }
+                }
+
+                g = obraz.CreateGraphics();
+            }
+
+            public void Rysuj()
+            {
+                Bitmap bmp = new Bitmap(obraz.Width, obraz.Height);
+                foreach (Ziarno ziarno in ziarna)
+                {
+                    bmp.SetPixel(ziarno.Xy.X, ziarno.Xy.Y, ziarno.Kolor);
+                }
+                g.DrawImage(bmp, 0, 0);
+            }
+
+            private List<Ziarno> ziarna;
+            private Panel obraz;
+            private int iloscZiaren;
+            private int wagi;
+            private List<Color> kolory;
+            private Graphics g;
+        }
+
+        Swiat swiat;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void rysuj()
-        {
-
-            Graphics g = obraz.CreateGraphics();
-            Bitmap bmp = new Bitmap(obraz.Width, obraz.Height);
-            foreach (Ziarno ziarno in ziarna)
-            {
-                bmp.SetPixel(ziarno.Xy.X, ziarno.Xy.Y, ziarno.Kolor);
-            }
-            g.DrawImage(bmp, 0, 0);
-        }
-
-        private void rysuj(Graphics g)
-        {
-
-            //Graphics g = obraz.CreateGraphics();
-            Bitmap bmp = new Bitmap(obraz.Width, obraz.Height);
-            foreach (Ziarno ziarno in ziarna)
-            {
-                bmp.SetPixel(ziarno.Xy.X, ziarno.Xy.Y, ziarno.Kolor);
-            }
-            g.DrawImage(bmp, 0, 0);
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             //losuj iloœæ kolorów - 3-10
             Random rnd = new Random();
-            int kolorCount = rnd.Next(3, 11);
-
-            //generuj kolory
-            List<Color> colors = new List<Color>();
-            for (int i = 0; i < kolorCount; i++)
-            {
-                colors.Add(Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)));
-            }
-            //IEnumerable<Color> query = colors.OrderBy(c => c.ToArgb());
-            //colors.Sort();
+            int iloscKolorow = rnd.Next(3, 11);
 
             //losuj iloœæ linii piasku 3-10
-            int linesCount = rnd.Next(3, 11);
+            int liniiPiasku = rnd.Next(3, 11);
 
-            ziarna = new List<Ziarno>(obraz.Width * linesCount);
-            for (int y = 0; y < linesCount; y++)
-            {
-                for (int x = 0; x < obraz.Width; x++)
-                {
-                    int kolorNumber = rnd.Next(colors.Count);
-                    //Ziarno ziarno = new Ziarno(new Point(x,y), colors[kolorNumber],kolorNumber);
-                    ziarna.Add(new Ziarno(new Point(x, y), colors[kolorNumber], kolorNumber));
-                }
-            }
+            swiat = new Swiat(obraz, liniiPiasku, iloscKolorow);
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            rysuj();
+            swiat.Rysuj();
         }
 
         static int nrRefr = 0;
         private void obraz_Paint(object sender, PaintEventArgs e)
         {
-            textBox1.Text = nrRefr.ToString();
-            if (nrRefr == 0)
-            {
-                rysuj(e.Graphics);
-                nrRefr++;
-            }
+            //textBox1.Text = nrRefr.ToString();
+            //if (nrRefr == 0)
+            //{
+            //    swiat.Rysuj();
+            //    nrRefr++;
+            //}
         }
     }
 }
