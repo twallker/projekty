@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             button1 = new Button();
             obraz = new Panel();
             textBox1 = new TextBox();
+            timer1 = new System.Windows.Forms.Timer(components);
+            timer2 = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
             // button1
@@ -58,6 +61,16 @@
             textBox1.Size = new Size(132, 23);
             textBox1.TabIndex = 2;
             // 
+            // timer1
+            // 
+            timer1.Interval = 30;
+            timer1.Tick += timer1_Tick;
+            // 
+            // timer2
+            // 
+            timer2.Interval = 300;
+            timer2.Tick += timer2_Tick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -78,5 +91,7 @@
         private Button button1;
         private Panel obraz;
         private TextBox textBox1;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer2;
     }
 }
