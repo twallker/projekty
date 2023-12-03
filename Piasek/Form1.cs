@@ -11,11 +11,12 @@ namespace Piasek
         }
         class Ziarno
         {
-            public Ziarno(Point pkt, Color color, int waga)
+            public Ziarno(Point pkt, Color color, int waga, int maxWagi)
             {
                 m_wspolrzedne = pkt;
                 m_kolor = color;
                 m_waga = waga;
+                m_maxwagi = maxWagi;
             }
 
             public void Przesun(int x, int y, IDictionary<int, IDictionary<int, Ziarno>> lista, ISwiat swiat)
@@ -26,11 +27,34 @@ namespace Piasek
                     bool next = false;
                     bool nextright = false;
                     swiat.IsNextFree(x, y, ref nextLeft, ref next, ref nextright);
-                    //czy mo¿na przesun¹æ siê ni¿ej
-                    if (next)
+                    Random rnd = new Random();
+                    //czy mo¿na przesun¹æ siê ni¿ej i 95% prawdopodobieñstwo spadku
+                    if ((next) && (rnd.Next(100) > 5))
                     {
                         lista[y + 1].Add(x, lista[y][x]);
                         lista[y].Remove(x);
+                    }else
+                    {
+                        //prawdopodobienstwo spadku na ktoras strone
+                        if (rnd.Next(m_maxwagi) < m_waga)
+                        {
+                            int strona = 0;
+                            if ((nextLeft) && (nextright))
+                            {
+                                if (rnd.Next(2) == 0) strona = -1;
+                            }
+                            else
+                            { 
+                                if (nextLeft) { strona = -1; }
+                                if (nextright) { strona = 1; }
+                            }
+                            if (strona != 0) 
+                            {
+                                lista[y + 1].Add(x+strona, lista[y][x]);
+                                lista[y].Remove(x);
+                            }
+                        }
+
                     }
                 }
             }
@@ -43,6 +67,7 @@ namespace Piasek
             private Point m_wspolrzedne;
             private Color m_kolor;
             private int m_waga;
+            static private int m_maxwagi = 0;
             private static IDictionary<int, IDictionary<int, Ziarno>> m_lista = new Dictionary<int, IDictionary<int, Ziarno>>();
         }
 
@@ -72,7 +97,7 @@ namespace Piasek
                     for (int x = 0; x < obraz.Width; x++)
                     {
                         int kolorNumber = rnd.Next(wagi);
-                        Ziarno ziarno = new(new Point(x, y), kolory[kolorNumber], kolorNumber);
+                        Ziarno ziarno = new(new Point(x, y), kolory[kolorNumber], kolorNumber, wagi);
                         ziarna.Add(ziarno);
                         lokalizacjaZiarna[y][x] = ziarno;
                     }
@@ -83,7 +108,7 @@ namespace Piasek
                 {
                     if (rnd.Next(obraz.Width) > iloscLuk)
                     {
-                        Ziarno ziarno = new(new Point(x, liniiPiasku), Color.LightBlue, -1);
+                        Ziarno ziarno = new(new Point(x, liniiPiasku), Color.LightBlue, -1, wagi);
                         ziarna.Add(ziarno);
                         lokalizacjaZiarna[liniiPiasku][x] = ziarno;
                     }
@@ -127,9 +152,9 @@ namespace Piasek
                 y++;
                 if(y < lokalizacjaZiarna.Count)
                 {
-                    nextLeft = !lokalizacjaZiarna[y].ContainsKey(x-1);
+                    if (x - 1 >= 0) { nextLeft = !lokalizacjaZiarna[y].ContainsKey(x - 1); }
                     next = !lokalizacjaZiarna[y].ContainsKey(x);
-                    nextright = !lokalizacjaZiarna[y].ContainsKey(x+1);
+                    if (x + 1 < obraz.Width) { nextright = !lokalizacjaZiarna[y].ContainsKey(x + 1); }
                 }
             }
 
@@ -156,8 +181,8 @@ namespace Piasek
             Random rnd = new Random();
             int iloscKolorow = rnd.Next(3, 11);
 
-            //losuj iloœæ linii piasku 3-10
-            int liniiPiasku = rnd.Next(3, 11);
+            //losuj iloœæ linii piasku
+            int liniiPiasku = rnd.Next(10, 30);
 
             swiat = new Swiat(obraz, liniiPiasku, iloscKolorow);
 
