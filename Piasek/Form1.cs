@@ -6,7 +6,6 @@ namespace Piasek
     {
         interface ISwiat
         {
-            //void IsNextFree();
             void IsNextFree(int x, int y, ref bool nextLeft, ref bool next, ref bool nextright);
         }
         class Ziarno
@@ -61,24 +60,24 @@ namespace Piasek
             public Point Xy { get => m_wspolrzedne; set => m_wspolrzedne = value; }
             public Color Kolor { get => m_kolor; set => m_kolor = value; }
 
-            public IDictionary<int, IDictionary<int, Ziarno>> UstawListe { set => m_lista = value; }
-
+            //public IDictionary<int, IDictionary<int, Ziarno>> UstawListe { set => m_lista = value; }
 
             private Point m_wspolrzedne;
             private Color m_kolor;
             private int m_waga;
-            static private int m_maxwagi = 0;
-            private static IDictionary<int, IDictionary<int, Ziarno>> m_lista = new Dictionary<int, IDictionary<int, Ziarno>>();
+            private static int m_maxwagi = 0;
+            //private static IDictionary<int, IDictionary<int, Ziarno>> m_lista = new Dictionary<int, IDictionary<int, Ziarno>>();
         }
 
         class Swiat : ISwiat
         {
             public Swiat(Panel obraz, int liniiPiasku, int wagi)
             {
-                this.obraz = obraz;
-                iloscZiaren = obraz.Width * liniiPiasku;
+                height = obraz.Height/ wielkoscZiarna;
+                width = obraz.Width/ wielkoscZiarna;
+                iloscZiaren = width * liniiPiasku;
 
-                kolory = new List<Color>(wagi);
+                kolory = new List<Color>(wagi);                
                 Random rnd = new Random();
                 for (int i = 0; i < wagi; i++)
                 {
@@ -86,7 +85,7 @@ namespace Piasek
                 }
 
                 lokalizacjaZiarna = new Dictionary<int, IDictionary<int, Ziarno>>();
-                for (int y = 0; y < obraz.Height; y++)
+                for (int y = 0; y < height; y++)
                 {
                     lokalizacjaZiarna.Add(y, new Dictionary<int, Ziarno>());
                 }
@@ -94,7 +93,7 @@ namespace Piasek
                 ziarna = new List<Ziarno>(iloscZiaren);
                 for (int y = 0; y < liniiPiasku; y++)
                 {
-                    for (int x = 0; x < obraz.Width; x++)
+                    for (int x = 0; x < width; x++)
                     {
                         int kolorNumber = rnd.Next(wagi);
                         Ziarno ziarno = new(new Point(x, y), kolory[kolorNumber], kolorNumber, wagi);
@@ -103,12 +102,13 @@ namespace Piasek
                     }
                 }
                 //powietrze
-                int iloscLuk = 5;
-                for (int x = 0; x < obraz.Width; ++x)
+                int iloscLuk = 8;
+                Color kolorPowietrza = Color.LightBlue;
+                for (int x = 0; x < width; ++x)
                 {
-                    if (rnd.Next(obraz.Width) > iloscLuk)
+                    if (rnd.Next(width) > iloscLuk)
                     {
-                        Ziarno ziarno = new(new Point(x, liniiPiasku), Color.LightBlue, -1, wagi);
+                        Ziarno ziarno = new(new Point(x, liniiPiasku), kolorPowietrza, -1, wagi);
                         ziarna.Add(ziarno);
                         lokalizacjaZiarna[liniiPiasku][x] = ziarno;
                     }
@@ -120,12 +120,16 @@ namespace Piasek
             public void Rysuj()
             {
                 g.Clear(background);
-                Bitmap bmp = new Bitmap(obraz.Width, obraz.Height);
-                for (int y = 0; y < obraz.Height; y++)
+                Bitmap bmp = new Bitmap(width * wielkoscZiarna, height * wielkoscZiarna);
+                for (int y = 0; y < height; y++)
                 {
                     foreach (var para in lokalizacjaZiarna[y])
                     {
-                        bmp.SetPixel(para.Key, y, para.Value.Kolor);
+                        for (int xp= 0; xp < wielkoscZiarna;  xp++)
+                            for (int yp= 0;yp < wielkoscZiarna; yp++)
+                            {
+                                bmp.SetPixel(para.Key * wielkoscZiarna + xp, y * wielkoscZiarna + yp, para.Value.Kolor);
+                            }
                     }
                 }
                 g.DrawImage(bmp, 0, 0);
@@ -133,7 +137,7 @@ namespace Piasek
 
             public void Przesun()
             {
-                for (int y = obraz.Height - 1; y >= 0; y--)
+                for (int y = height - 1; y >= 0; y--)
                 {
                     foreach (var para in lokalizacjaZiarna[y])
                     {
@@ -154,14 +158,15 @@ namespace Piasek
                 {
                     if (x - 1 >= 0) { nextLeft = !lokalizacjaZiarna[y].ContainsKey(x - 1); }
                     next = !lokalizacjaZiarna[y].ContainsKey(x);
-                    if (x + 1 < obraz.Width) { nextright = !lokalizacjaZiarna[y].ContainsKey(x + 1); }
+                    if (x + 1 < width) { nextright = !lokalizacjaZiarna[y].ContainsKey(x + 1); }
                 }
             }
 
             private List<Ziarno> ziarna;
-            private Panel obraz;
+            private int height;
+            private int width;
+            private int wielkoscZiarna = 2;
             private int iloscZiaren;
-            private int wagi;
             private List<Color> kolory;
             private Graphics g;
             IDictionary<int, IDictionary<int, Ziarno>> lokalizacjaZiarna;
