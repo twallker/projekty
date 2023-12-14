@@ -6,7 +6,9 @@ namespace Piasek
     {
         interface ISwiat
         {
-            void IsNextFree(int x, int y, ref bool nextLeft, ref bool next, ref bool nextright);
+            bool CheckPoint(int x, int y);
+            bool CheckPoint(int x, int y, ref Ziarno? ziarno);
+
         }
         class Ziarno
         {
@@ -22,30 +24,28 @@ namespace Piasek
             {
                 if ((lista[y][x].m_waga >= 0) && (y+1 < lista.Count))
                 {
-                    bool nextLeft = false;
-                    bool next = false;
-                    bool nextright = false;
-                    swiat.IsNextFree(x, y, ref nextLeft, ref next, ref nextright);
                     Random rnd = new Random();
-                    //czy mo¿na przesun¹æ siê ni¿ej i 95% prawdopodobieñstwo spadku
-                    if ((next) && (rnd.Next(100) > 5))
+                    //czy mo¿na przesun¹æ siê ni¿ej i 95% prawdopodobieñstwo spadku                    
+                    if ((swiat.CheckPoint(x, y + 1)) && (rnd.Next(100) > 5))
                     {
-                        lista[y + 1].Add(x, lista[y][x]);
+                        lista[y + 1].Add(x, this);
                         lista[y].Remove(x);
                     }else
                     {
                         //prawdopodobienstwo spadku na ktoras strone
-                        if (rnd.Next(m_maxwagi) < m_waga)
+                        if (rnd.Next(m_maxwagi) < m_waga+1)
                         {
                             int strona = 0;
-                            if ((nextLeft) && (nextright))
+                            bool nextLeftZ = swiat.CheckPoint(x - 1, y + 1);
+                            bool nextrightZ = swiat.CheckPoint(x + 1, y + 1);
+                            if ((nextLeftZ) && (nextrightZ))
                             {
-                                if (rnd.Next(2) == 0) strona = -1;
+                                strona = rnd.Next(2) == 0 ? 1 : -1;
                             }
                             else
-                            { 
-                                if (nextLeft) { strona = -1; }
-                                if (nextright) { strona = 1; }
+                            {
+                                if (nextLeftZ) { strona = -1; }
+                                if (nextrightZ) { strona = 1; }
                             }
                             if (strona != 0) 
                             {
@@ -60,13 +60,10 @@ namespace Piasek
             public Point Xy { get => m_wspolrzedne; set => m_wspolrzedne = value; }
             public Color Kolor { get => m_kolor; set => m_kolor = value; }
 
-            //public IDictionary<int, IDictionary<int, Ziarno>> UstawListe { set => m_lista = value; }
-
             private Point m_wspolrzedne;
             private Color m_kolor;
             private int m_waga;
             private static int m_maxwagi = 0;
-            //private static IDictionary<int, IDictionary<int, Ziarno>> m_lista = new Dictionary<int, IDictionary<int, Ziarno>>();
         }
 
         class Swiat : ISwiat
@@ -103,7 +100,8 @@ namespace Piasek
                 }
                 //powietrze
                 int iloscLuk = 8;
-                Color kolorPowietrza = Color.LightBlue;
+                //Color kolorPowietrza = Color.LightBlue;
+                Color kolorPowietrza = Color.Black;
                 for (int x = 0; x < width; ++x)
                 {
                     if (rnd.Next(width) > iloscLuk)
@@ -148,18 +146,36 @@ namespace Piasek
                 }
             }
 
-            void ISwiat.IsNextFree(int x, int y, ref bool nextLeft, ref bool next, ref bool nextright)
+            // return true gdy mozna siê przesun¹æ na ten punkt
+            bool ISwiat.CheckPoint(int x, int y, ref Piasek.Form1.Ziarno? ziarno)
             {
-                nextLeft = false;
-                next = false;
-                nextright = false;
-                y++;
-                if(y < lokalizacjaZiarna.Count)
+                ziarno = null;
+                if ((y < 0) || (y >= height) || (x < 0) || (x >= width))
                 {
-                    if (x - 1 >= 0) { nextLeft = !lokalizacjaZiarna[y].ContainsKey(x - 1); }
-                    next = !lokalizacjaZiarna[y].ContainsKey(x);
-                    if (x + 1 < width) { nextright = !lokalizacjaZiarna[y].ContainsKey(x + 1); }
+                    return false;
                 }
+
+                if (lokalizacjaZiarna.ContainsKey(y) && (lokalizacjaZiarna[y].ContainsKey(x)))
+                {
+                    ziarno = lokalizacjaZiarna[y][x];
+                    return false;
+                }
+                return true;
+            }
+
+            // return true gdy mozna siê przesun¹æ na ten punkt
+            bool ISwiat.CheckPoint(int x, int y)
+            {
+                if ((y < 0) || (y >= height) || (x < 0) || (x >= width))
+                {
+                    return false;
+                }
+
+                if (lokalizacjaZiarna.ContainsKey(y) && (lokalizacjaZiarna[y].ContainsKey(x)))
+                {
+                    return false;
+                }
+                return true;
             }
 
             private List<Ziarno> ziarna;
