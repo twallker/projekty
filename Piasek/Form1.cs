@@ -12,28 +12,31 @@ namespace Piasek
         }
         class Ziarno
         {
-            public Ziarno(Point pkt, Color color, int waga, int maxWagi)
+            public Ziarno(Point pkt, Color color, int waga)
             {
                 m_wspolrzedne = pkt;
                 m_kolor = color;
                 m_waga = waga;
-                m_maxwagi = maxWagi;
             }
 
             public void Przesun(int x, int y, IDictionary<int, IDictionary<int, Ziarno>> lista, ISwiat swiat)
             {
-                if ((lista[y][x].m_waga >= 0) && (y+1 < lista.Count))
+                if ((lista[y][x].m_waga >= 0) && (y + 1 < lista.Count))
                 {
                     Random rnd = new Random();
                     //czy mo¿na przesun¹æ siê ni¿ej i 95% prawdopodobieñstwo spadku                    
-                    if ((swiat.CheckPoint(x, y + 1)) && (rnd.Next(100) > 5))
+                    if (swiat.CheckPoint(x, y + 1))
                     {
-                        lista[y + 1].Add(x, this);
-                        lista[y].Remove(x);
-                    }else
+                        if (rnd.Next(100) > 5)
+                        {
+                            lista[y + 1].Add(x, this);
+                            lista[y].Remove(x);
+                        }
+                    }
+                    else
                     {
                         //prawdopodobienstwo spadku na ktoras strone
-                        if (rnd.Next(m_maxwagi) < m_waga+1)
+                        if (rnd.Next(100) > m_waga)
                         {
                             int strona = 0;
                             bool nextLeftZ = swiat.CheckPoint(x - 1, y + 1);
@@ -47,13 +50,12 @@ namespace Piasek
                                 if (nextLeftZ) { strona = -1; }
                                 if (nextrightZ) { strona = 1; }
                             }
-                            if (strona != 0) 
+                            if (strona != 0)
                             {
-                                lista[y + 1].Add(x+strona, lista[y][x]);
+                                lista[y + 1].Add(x + strona, lista[y][x]);
                                 lista[y].Remove(x);
                             }
                         }
-
                     }
                 }
             }
@@ -63,22 +65,23 @@ namespace Piasek
             private Point m_wspolrzedne;
             private Color m_kolor;
             private int m_waga;
-            private static int m_maxwagi = 0;
         }
 
         class Swiat : ISwiat
         {
             public Swiat(Panel obraz, int liniiPiasku, int wagi)
             {
-                height = obraz.Height/ wielkoscZiarna;
-                width = obraz.Width/ wielkoscZiarna;
+                height = obraz.Height / wielkoscZiarna;
+                width = obraz.Width / wielkoscZiarna;
                 iloscZiaren = width * liniiPiasku;
 
-                kolory = new List<Color>(wagi);                
+                kolory = new List<Color>(wagi);
+                m_wagi = new List<int>(wagi);
                 Random rnd = new Random();
                 for (int i = 0; i < wagi; i++)
                 {
                     kolory.Add(Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)));
+                    m_wagi.Add(rnd.Next(100));
                 }
 
                 lokalizacjaZiarna = new Dictionary<int, IDictionary<int, Ziarno>>();
@@ -93,7 +96,7 @@ namespace Piasek
                     for (int x = 0; x < width; x++)
                     {
                         int kolorNumber = rnd.Next(wagi);
-                        Ziarno ziarno = new(new Point(x, y), kolory[kolorNumber], kolorNumber, wagi);
+                        Ziarno ziarno = new(new Point(x, y), kolory[kolorNumber], m_wagi[kolorNumber]);
                         ziarna.Add(ziarno);
                         lokalizacjaZiarna[y][x] = ziarno;
                     }
@@ -106,7 +109,7 @@ namespace Piasek
                 {
                     if (rnd.Next(width) > iloscLuk)
                     {
-                        Ziarno ziarno = new(new Point(x, liniiPiasku), kolorPowietrza, -1, wagi);
+                        Ziarno ziarno = new(new Point(x, liniiPiasku), kolorPowietrza, -1);
                         ziarna.Add(ziarno);
                         lokalizacjaZiarna[liniiPiasku][x] = ziarno;
                     }
@@ -123,8 +126,8 @@ namespace Piasek
                 {
                     foreach (var para in lokalizacjaZiarna[y])
                     {
-                        for (int xp= 0; xp < wielkoscZiarna;  xp++)
-                            for (int yp= 0;yp < wielkoscZiarna; yp++)
+                        for (int xp = 0; xp < wielkoscZiarna; xp++)
+                            for (int yp = 0; yp < wielkoscZiarna; yp++)
                             {
                                 bmp.SetPixel(para.Key * wielkoscZiarna + xp, y * wielkoscZiarna + yp, para.Value.Kolor);
                             }
@@ -184,6 +187,7 @@ namespace Piasek
             private int wielkoscZiarna = 2;
             private int iloscZiaren;
             private List<Color> kolory;
+            private List<int> m_wagi;
             private Graphics g;
             IDictionary<int, IDictionary<int, Ziarno>> lokalizacjaZiarna;
             Color background = Color.LightGray;
@@ -230,6 +234,12 @@ namespace Piasek
         private void timer2_Tick(object sender, EventArgs e)
         {
             swiat.Rysuj();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            timer2.Stop();  
         }
     }
 }

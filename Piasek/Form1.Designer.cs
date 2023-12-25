@@ -34,6 +34,7 @@
             textBox1 = new TextBox();
             timer1 = new System.Windows.Forms.Timer(components);
             timer2 = new System.Windows.Forms.Timer(components);
+            button2 = new Button();
             SuspendLayout();
             // 
             // button1
@@ -71,11 +72,22 @@
             timer2.Interval = 300;
             timer2.Tick += timer2_Tick;
             // 
+            // button2
+            // 
+            button2.Location = new Point(591, 41);
+            button2.Name = "button2";
+            button2.Size = new Size(84, 23);
+            button2.TabIndex = 3;
+            button2.Text = "Stop";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button2);
             Controls.Add(textBox1);
             Controls.Add(obraz);
             Controls.Add(button1);
@@ -93,5 +105,6 @@
         private TextBox textBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
+        private Button button2;
     }
 }
