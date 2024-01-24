@@ -9,6 +9,7 @@ namespace Piasek
             bool CheckPoint(int x, int y);
             bool CheckPoint(int x, int y, ref Ziarno? ziarno);
 
+            List<List<Ziarno>> GetAirGroup();
         }
         class Ziarno
         {
@@ -58,6 +59,12 @@ namespace Piasek
                         }
                     }
                 }
+                // powietrze
+                List<List<Ziarno>> airGrup = swiat.GetAirGroup();
+                foreach(List<Ziarno> grupa in airGrup)
+                {
+
+                }
             }
             public Point Xy { get => m_wspolrzedne; set => m_wspolrzedne = value; }
             public Color Kolor { get => m_kolor; set => m_kolor = value; }
@@ -101,10 +108,13 @@ namespace Piasek
                         lokalizacjaZiarna[y][x] = ziarno;
                     }
                 }
+
                 //powietrze
                 int iloscLuk = 8;
+                m_airGroup = new List<List<Ziarno>>();
                 //Color kolorPowietrza = Color.LightBlue;
                 Color kolorPowietrza = Color.Black;
+                List<Ziarno> grupa = new List<Ziarno>();
                 for (int x = 0; x < width; ++x)
                 {
                     if (rnd.Next(width) > iloscLuk)
@@ -112,6 +122,14 @@ namespace Piasek
                         Ziarno ziarno = new(new Point(x, liniiPiasku), kolorPowietrza, -1);
                         ziarna.Add(ziarno);
                         lokalizacjaZiarna[liniiPiasku][x] = ziarno;
+                        grupa.Add(ziarno );
+                    }else
+                    {
+                        if (grupa.Count != 0)
+                        {
+                            m_airGroup.Add(grupa);
+                            grupa = new List<Ziarno>();
+                        }
                     }
                 }
 
@@ -181,6 +199,11 @@ namespace Piasek
                 return true;
             }
 
+            List<List<Ziarno>> ISwiat.GetAirGroup()
+            {
+                return m_airGroup;
+            }
+
             private List<Ziarno> ziarna;
             private int height;
             private int width;
@@ -190,6 +213,7 @@ namespace Piasek
             private List<int> m_wagi;
             private Graphics g;
             IDictionary<int, IDictionary<int, Ziarno>> lokalizacjaZiarna;
+            private List<List<Ziarno>> m_airGroup;
             Color background = Color.LightGray;
         }
 
