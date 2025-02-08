@@ -5,6 +5,7 @@ namespace Figury
         public Form1()
         {
             InitializeComponent();
+            zasobnikFigur.Items.Add("coœ");
         }
     }
 }
