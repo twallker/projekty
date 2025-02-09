@@ -251,6 +251,7 @@
             userFig.Name = "userFig";
             userFig.Size = new Size(101, 23);
             userFig.TabIndex = 18;
+            userFig.SelectionChangeCommitted += userFig_SelectionChangeCommitted;
             // 
             // button2
             // 

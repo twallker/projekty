@@ -27,6 +27,7 @@ namespace Figury
         }
 
         private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)
+        //private void zasobnikFigur_SelectionChangeCommitted(object sender, EventArgs e)
         {
             bool found = false;
             foreach (IFigury f in dostepneFigury)
@@ -82,15 +83,23 @@ namespace Figury
                     IFigury obj = (IFigury)Activator.CreateInstance(f.GetType());
                     if (obj == null) { throw new InvalidOperationException("Nie utworzono biektu!"); }
                     figuries.Add(obj);
-                    userFig.Items.Add(obj.nazwa + "_" + obj.id);
+                    string nazwa = obj.nazwa + "_" + obj.id;
+                    userFig.Items.Add(nazwa);
+                    userFig.Text = nazwa;
                     List<decimal> param = new List<decimal>();
-                    foreach(System.Windows.Forms.NumericUpDown l in dostêpneWartosci)
+                    foreach (System.Windows.Forms.NumericUpDown l in dostêpneWartosci)
                     {
                         if (l.Visible) param.Add(l.Value);
                     }
                     obj.SetParameters(param);
                 }
             }
+        }
+
+        private void userFig_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            this.Text = IFigury.licznik.ToString();
+            IFigury.licznik++;
         }
     }
     public abstract class IFigury
@@ -111,39 +120,64 @@ namespace Figury
 
         public abstract ReadOnlyCollection<int> GetDefaultVal { get; }
 
-        public abstract bool SetParameters(List<decimal> parametry);
+        virtual public bool SetParameters(List<decimal> parametry)
+        {
+            if (parametry.Count != GetParamNames.Count)
+            { 
+                return false; 
+            }
+            return true;
+        }
     }
 
     public class Prostok¹t : IFigury
     {
+        private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
         public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 10, 20, 0, 0 }.AsReadOnly(); } }
 
-        public override bool SetParameters(List<decimal> parametry)
+        override public bool SetParameters(List<decimal> parametry)
         {
-            throw new NotImplementedException();
+            if ((base.SetParameters(parametry) == false) || (parametry[0] <= 0) || (parametry[1]) <= 0)
+            {
+                return false;
+            }
+            m_parametry = parametry;
+            return true;
         }
     }
 
     public class Kwadrat : IFigury
     {
+        private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
         public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 10, 0, 0 }.AsReadOnly(); } }
 
-        public override bool SetParameters(List<decimal> parametry)
+        public new bool SetParameters(List<decimal> parametry)
         {
-            throw new NotImplementedException();
+            if ((base.SetParameters(parametry) == false) || (parametry[0] <= 0))
+            {
+                return false;
+            }
+            m_parametry = parametry;
+            return true;
         }
     }
 
     public class Ko³o : IFigury
     {
+        private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
         public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 20, 0, 0 }.AsReadOnly(); } }
 
-        public override bool SetParameters(List<decimal> parametry)
+        public new bool SetParameters(List<decimal> parametry)
         {
-            throw new NotImplementedException();
+            if ((base.SetParameters(parametry) == false) || (parametry[0] <= 0))
+            {
+                return false;
+            }
+            m_parametry = parametry;
+            return true;
         }
     }
 }
