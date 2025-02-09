@@ -33,29 +33,29 @@
             label1 = new Label();
             p0 = new Label();
             button1 = new Button();
-            numericUpDown1 = new NumericUpDown();
-            numericUpDown2 = new NumericUpDown();
+            v0 = new NumericUpDown();
+            v1 = new NumericUpDown();
             p1 = new Label();
-            numericUpDown3 = new NumericUpDown();
+            v3 = new NumericUpDown();
             p3 = new Label();
-            numericUpDown4 = new NumericUpDown();
+            v2 = new NumericUpDown();
             p2 = new Label();
-            numericUpDown5 = new NumericUpDown();
+            v5 = new NumericUpDown();
             p5 = new Label();
-            numericUpDown6 = new NumericUpDown();
+            v4 = new NumericUpDown();
             p4 = new Label();
-            numericUpDown8 = new NumericUpDown();
+            v6 = new NumericUpDown();
             p6 = new Label();
             label8 = new Label();
-            comboBox1 = new ComboBox();
+            userFig = new ComboBox();
             button2 = new Button();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown4).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown5).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown6).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown8).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v0).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)v6).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -102,28 +102,27 @@
             button1.TabIndex = 4;
             button1.Text = "Dodaj";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
-            // numericUpDown1
+            // v0
             // 
-            numericUpDown1.Enabled = false;
-            numericUpDown1.Location = new Point(215, 5);
-            numericUpDown1.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown1.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(56, 23);
-            numericUpDown1.TabIndex = 5;
-            numericUpDown1.Visible = false;
+            v0.Location = new Point(215, 5);
+            v0.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v0.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v0.Name = "v0";
+            v0.Size = new Size(56, 23);
+            v0.TabIndex = 5;
+            v0.Visible = false;
             // 
-            // numericUpDown2
+            // v1
             // 
-            numericUpDown2.Enabled = false;
-            numericUpDown2.Location = new Point(327, 5);
-            numericUpDown2.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown2.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(56, 23);
-            numericUpDown2.TabIndex = 7;
-            numericUpDown2.Visible = false;
+            v1.Location = new Point(327, 5);
+            v1.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v1.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v1.Name = "v1";
+            v1.Size = new Size(56, 23);
+            v1.TabIndex = 7;
+            v1.Visible = false;
             // 
             // p1
             // 
@@ -135,16 +134,15 @@
             p1.Text = "param:";
             p1.Visible = false;
             // 
-            // numericUpDown3
+            // v3
             // 
-            numericUpDown3.Enabled = false;
-            numericUpDown3.Location = new Point(551, 4);
-            numericUpDown3.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown3.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown3.Name = "numericUpDown3";
-            numericUpDown3.Size = new Size(56, 23);
-            numericUpDown3.TabIndex = 11;
-            numericUpDown3.Visible = false;
+            v3.Location = new Point(551, 4);
+            v3.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v3.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v3.Name = "v3";
+            v3.Size = new Size(56, 23);
+            v3.TabIndex = 11;
+            v3.Visible = false;
             // 
             // p3
             // 
@@ -156,16 +154,15 @@
             p3.Text = "param:";
             p3.Visible = false;
             // 
-            // numericUpDown4
+            // v2
             // 
-            numericUpDown4.Enabled = false;
-            numericUpDown4.Location = new Point(439, 4);
-            numericUpDown4.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown4.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown4.Name = "numericUpDown4";
-            numericUpDown4.Size = new Size(56, 23);
-            numericUpDown4.TabIndex = 9;
-            numericUpDown4.Visible = false;
+            v2.Location = new Point(439, 4);
+            v2.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v2.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v2.Name = "v2";
+            v2.Size = new Size(56, 23);
+            v2.TabIndex = 9;
+            v2.Visible = false;
             // 
             // p2
             // 
@@ -177,16 +174,15 @@
             p2.Text = "param:";
             p2.Visible = false;
             // 
-            // numericUpDown5
+            // v5
             // 
-            numericUpDown5.Enabled = false;
-            numericUpDown5.Location = new Point(775, 5);
-            numericUpDown5.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown5.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown5.Name = "numericUpDown5";
-            numericUpDown5.Size = new Size(56, 23);
-            numericUpDown5.TabIndex = 15;
-            numericUpDown5.Visible = false;
+            v5.Location = new Point(775, 5);
+            v5.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v5.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v5.Name = "v5";
+            v5.Size = new Size(56, 23);
+            v5.TabIndex = 15;
+            v5.Visible = false;
             // 
             // p5
             // 
@@ -198,16 +194,15 @@
             p5.Text = "param:";
             p5.Visible = false;
             // 
-            // numericUpDown6
+            // v4
             // 
-            numericUpDown6.Enabled = false;
-            numericUpDown6.Location = new Point(663, 5);
-            numericUpDown6.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown6.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown6.Name = "numericUpDown6";
-            numericUpDown6.Size = new Size(56, 23);
-            numericUpDown6.TabIndex = 13;
-            numericUpDown6.Visible = false;
+            v4.Location = new Point(663, 5);
+            v4.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v4.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v4.Name = "v4";
+            v4.Size = new Size(56, 23);
+            v4.TabIndex = 13;
+            v4.Visible = false;
             // 
             // p4
             // 
@@ -219,16 +214,15 @@
             p4.Text = "param:";
             p4.Visible = false;
             // 
-            // numericUpDown8
+            // v6
             // 
-            numericUpDown8.Enabled = false;
-            numericUpDown8.Location = new Point(887, 5);
-            numericUpDown8.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
-            numericUpDown8.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
-            numericUpDown8.Name = "numericUpDown8";
-            numericUpDown8.Size = new Size(56, 23);
-            numericUpDown8.TabIndex = 17;
-            numericUpDown8.Visible = false;
+            v6.Location = new Point(887, 5);
+            v6.Maximum = new decimal(new int[] { 2000, 0, 0, 0 });
+            v6.Minimum = new decimal(new int[] { 2000, 0, 0, int.MinValue });
+            v6.Name = "v6";
+            v6.Size = new Size(56, 23);
+            v6.TabIndex = 17;
+            v6.Visible = false;
             // 
             // p6
             // 
@@ -249,14 +243,14 @@
             label8.TabIndex = 19;
             label8.Text = "Dodane";
             // 
-            // comboBox1
+            // userFig
             // 
-            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(58, 34);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(101, 23);
-            comboBox1.TabIndex = 18;
+            userFig.DropDownStyle = ComboBoxStyle.DropDownList;
+            userFig.FormattingEnabled = true;
+            userFig.Location = new Point(58, 34);
+            userFig.Name = "userFig";
+            userFig.Size = new Size(101, 23);
+            userFig.TabIndex = 18;
             // 
             // button2
             // 
@@ -274,20 +268,20 @@
             ClientSize = new Size(1044, 584);
             Controls.Add(button2);
             Controls.Add(label8);
-            Controls.Add(comboBox1);
-            Controls.Add(numericUpDown8);
+            Controls.Add(userFig);
+            Controls.Add(v6);
             Controls.Add(p6);
-            Controls.Add(numericUpDown5);
+            Controls.Add(v5);
             Controls.Add(p5);
-            Controls.Add(numericUpDown6);
+            Controls.Add(v4);
             Controls.Add(p4);
-            Controls.Add(numericUpDown3);
+            Controls.Add(v3);
             Controls.Add(p3);
-            Controls.Add(numericUpDown4);
+            Controls.Add(v2);
             Controls.Add(p2);
-            Controls.Add(numericUpDown2);
+            Controls.Add(v1);
             Controls.Add(p1);
-            Controls.Add(numericUpDown1);
+            Controls.Add(v0);
             Controls.Add(button1);
             Controls.Add(p0);
             Controls.Add(label1);
@@ -295,13 +289,13 @@
             Controls.Add(panel1);
             Name = "Form1";
             Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown5).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown6).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown8).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v0).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)v6).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -313,21 +307,21 @@
         private Label label1;
         private Label p0;
         private Button button1;
-        private NumericUpDown numericUpDown1;
-        private NumericUpDown numericUpDown2;
+        private NumericUpDown v0;
+        private NumericUpDown v1;
         private Label p1;
-        private NumericUpDown numericUpDown3;
+        private NumericUpDown v3;
         private Label p3;
-        private NumericUpDown numericUpDown4;
+        private NumericUpDown v2;
         private Label p2;
-        private NumericUpDown numericUpDown5;
+        private NumericUpDown v5;
         private Label p5;
-        private NumericUpDown numericUpDown6;
+        private NumericUpDown v4;
         private Label p4;
-        private NumericUpDown numericUpDown8;
+        private NumericUpDown v6;
         private Label p6;
         private Label label8;
-        private ComboBox comboBox1;
+        private ComboBox userFig;
         private Button button2;
     }
 }
