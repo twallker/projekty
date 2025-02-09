@@ -7,6 +7,7 @@ namespace Figury
         private List<IFigury> dostepneFigury = [new Prostok¹t(), new Kwadrat(), new Ko³o()];
         private List<System.Windows.Forms.NumericUpDown> dostêpneWartosci;
         private List<System.Windows.Forms.Label> dostêpneParametry;
+        private List<IFigury> figuries;
         public Form1()
         {
             InitializeComponent();
@@ -22,6 +23,7 @@ namespace Figury
                 zasobnikFigur.Items.Add(f.nazwa);
             }
             zasobnikFigur.SelectedIndex = 0;
+            figuries = new List<IFigury>();
         }
 
         private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)
@@ -33,6 +35,11 @@ namespace Figury
                 {
                     found = true;
                     var lista = f.GetParamNames;
+                    var defVal = f.GetDefaultVal;
+                    if (lista.Count != defVal.Count)
+                    {
+                        throw new InvalidOperationException("Iloœæ parametrów i wartoœci defaultowych sie nie zgadza");
+                    }
                     if (lista.Count > dostêpneParametry.Count)
                     {
                         throw new InvalidOperationException("Brak miejsca na parametry");
@@ -44,7 +51,7 @@ namespace Figury
                             dostêpneParametry[i].Text = lista[i];
                             dostêpneParametry[i].Visible = true;
                             dostêpneWartosci[i].Visible = true;
-                            dostêpneWartosci[i].Value = 0;
+                            dostêpneWartosci[i].Value = defVal[i];
                         }
                         else
                         {
@@ -74,7 +81,14 @@ namespace Figury
 
                     IFigury obj = (IFigury)Activator.CreateInstance(f.GetType());
                     if (obj == null) { throw new InvalidOperationException("Nie utworzono biektu!"); }
-                    userFig.Items.Add(obj.nazwa + obj.id);
+                    figuries.Add(obj);
+                    userFig.Items.Add(obj.nazwa + "_" + obj.id);
+                    List<decimal> param = new List<decimal>();
+                    foreach(System.Windows.Forms.NumericUpDown l in dostêpneWartosci)
+                    {
+                        if (l.Visible) param.Add(l.Value);
+                    }
+                    obj.SetParameters(param);
                 }
             }
         }
@@ -94,20 +108,42 @@ namespace Figury
         public string nazwa { get;  }
 
         public abstract ReadOnlyCollection<string> GetParamNames { get; }
+
+        public abstract ReadOnlyCollection<int> GetDefaultVal { get; }
+
+        public abstract bool SetParameters(List<decimal> parametry);
     }
 
     public class Prostok¹t : IFigury
     {
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
+        public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 10, 20, 0, 0 }.AsReadOnly(); } }
+
+        public override bool SetParameters(List<decimal> parametry)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Kwadrat : IFigury
     {
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
+        public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 10, 0, 0 }.AsReadOnly(); } }
+
+        public override bool SetParameters(List<decimal> parametry)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Ko³o : IFigury
     {
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
+        public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 20, 0, 0 }.AsReadOnly(); } }
+
+        public override bool SetParameters(List<decimal> parametry)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -32,7 +32,7 @@
             zasobnikFigur = new ComboBox();
             label1 = new Label();
             p0 = new Label();
-            button1 = new Button();
+            Dodaj = new Button();
             v0 = new NumericUpDown();
             v1 = new NumericUpDown();
             p1 = new Label();
@@ -94,15 +94,15 @@
             p0.Text = "param:";
             p0.Visible = false;
             // 
-            // button1
+            // Dodaj
             // 
-            button1.Location = new Point(957, 5);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 4;
-            button1.Text = "Dodaj";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            Dodaj.Location = new Point(957, 5);
+            Dodaj.Name = "Dodaj";
+            Dodaj.Size = new Size(75, 23);
+            Dodaj.TabIndex = 4;
+            Dodaj.Text = "Dodaj";
+            Dodaj.UseVisualStyleBackColor = true;
+            Dodaj.Click += button1_Click;
             // 
             // v0
             // 
@@ -282,7 +282,7 @@
             Controls.Add(v1);
             Controls.Add(p1);
             Controls.Add(v0);
-            Controls.Add(button1);
+            Controls.Add(Dodaj);
             Controls.Add(p0);
             Controls.Add(label1);
             Controls.Add(zasobnikFigur);
@@ -306,7 +306,7 @@
         private ComboBox zasobnikFigur;
         private Label label1;
         private Label p0;
-        private Button button1;
+        private Button Dodaj;
         private NumericUpDown v0;
         private NumericUpDown v1;
         private Label p1;
