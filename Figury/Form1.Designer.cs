@@ -31,21 +31,21 @@
             panel1 = new Panel();
             zasobnikFigur = new ComboBox();
             label1 = new Label();
-            label2 = new Label();
+            p0 = new Label();
             button1 = new Button();
             numericUpDown1 = new NumericUpDown();
             numericUpDown2 = new NumericUpDown();
-            label3 = new Label();
+            p1 = new Label();
             numericUpDown3 = new NumericUpDown();
-            label4 = new Label();
+            p3 = new Label();
             numericUpDown4 = new NumericUpDown();
-            label5 = new Label();
+            p2 = new Label();
             numericUpDown5 = new NumericUpDown();
-            label6 = new Label();
+            p5 = new Label();
             numericUpDown6 = new NumericUpDown();
-            label7 = new Label();
+            p4 = new Label();
             numericUpDown8 = new NumericUpDown();
-            label9 = new Label();
+            p6 = new Label();
             label8 = new Label();
             comboBox1 = new ComboBox();
             button2 = new Button();
@@ -73,6 +73,7 @@
             zasobnikFigur.Name = "zasobnikFigur";
             zasobnikFigur.Size = new Size(101, 23);
             zasobnikFigur.TabIndex = 1;
+            zasobnikFigur.SelectedIndexChanged += zasobnikFigur_SelectedIndexChanged;
             // 
             // label1
             // 
@@ -83,14 +84,15 @@
             label1.TabIndex = 2;
             label1.Text = "Figura";
             // 
-            // label2
+            // p0
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(165, 8);
-            label2.Name = "label2";
-            label2.Size = new Size(44, 15);
-            label2.TabIndex = 3;
-            label2.Text = "param:";
+            p0.AutoSize = true;
+            p0.Location = new Point(165, 8);
+            p0.Name = "p0";
+            p0.Size = new Size(44, 15);
+            p0.TabIndex = 3;
+            p0.Text = "param:";
+            p0.Visible = false;
             // 
             // button1
             // 
@@ -110,6 +112,7 @@
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(56, 23);
             numericUpDown1.TabIndex = 5;
+            numericUpDown1.Visible = false;
             // 
             // numericUpDown2
             // 
@@ -120,15 +123,17 @@
             numericUpDown2.Name = "numericUpDown2";
             numericUpDown2.Size = new Size(56, 23);
             numericUpDown2.TabIndex = 7;
+            numericUpDown2.Visible = false;
             // 
-            // label3
+            // p1
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(277, 8);
-            label3.Name = "label3";
-            label3.Size = new Size(44, 15);
-            label3.TabIndex = 6;
-            label3.Text = "param:";
+            p1.AutoSize = true;
+            p1.Location = new Point(277, 8);
+            p1.Name = "p1";
+            p1.Size = new Size(44, 15);
+            p1.TabIndex = 6;
+            p1.Text = "param:";
+            p1.Visible = false;
             // 
             // numericUpDown3
             // 
@@ -139,15 +144,17 @@
             numericUpDown3.Name = "numericUpDown3";
             numericUpDown3.Size = new Size(56, 23);
             numericUpDown3.TabIndex = 11;
+            numericUpDown3.Visible = false;
             // 
-            // label4
+            // p3
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(501, 7);
-            label4.Name = "label4";
-            label4.Size = new Size(44, 15);
-            label4.TabIndex = 10;
-            label4.Text = "param:";
+            p3.AutoSize = true;
+            p3.Location = new Point(501, 7);
+            p3.Name = "p3";
+            p3.Size = new Size(44, 15);
+            p3.TabIndex = 10;
+            p3.Text = "param:";
+            p3.Visible = false;
             // 
             // numericUpDown4
             // 
@@ -158,15 +165,17 @@
             numericUpDown4.Name = "numericUpDown4";
             numericUpDown4.Size = new Size(56, 23);
             numericUpDown4.TabIndex = 9;
+            numericUpDown4.Visible = false;
             // 
-            // label5
+            // p2
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(389, 7);
-            label5.Name = "label5";
-            label5.Size = new Size(44, 15);
-            label5.TabIndex = 8;
-            label5.Text = "param:";
+            p2.AutoSize = true;
+            p2.Location = new Point(389, 7);
+            p2.Name = "p2";
+            p2.Size = new Size(44, 15);
+            p2.TabIndex = 8;
+            p2.Text = "param:";
+            p2.Visible = false;
             // 
             // numericUpDown5
             // 
@@ -177,15 +186,17 @@
             numericUpDown5.Name = "numericUpDown5";
             numericUpDown5.Size = new Size(56, 23);
             numericUpDown5.TabIndex = 15;
+            numericUpDown5.Visible = false;
             // 
-            // label6
+            // p5
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(725, 8);
-            label6.Name = "label6";
-            label6.Size = new Size(44, 15);
-            label6.TabIndex = 14;
-            label6.Text = "param:";
+            p5.AutoSize = true;
+            p5.Location = new Point(725, 8);
+            p5.Name = "p5";
+            p5.Size = new Size(44, 15);
+            p5.TabIndex = 14;
+            p5.Text = "param:";
+            p5.Visible = false;
             // 
             // numericUpDown6
             // 
@@ -196,15 +207,17 @@
             numericUpDown6.Name = "numericUpDown6";
             numericUpDown6.Size = new Size(56, 23);
             numericUpDown6.TabIndex = 13;
+            numericUpDown6.Visible = false;
             // 
-            // label7
+            // p4
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(613, 8);
-            label7.Name = "label7";
-            label7.Size = new Size(44, 15);
-            label7.TabIndex = 12;
-            label7.Text = "param:";
+            p4.AutoSize = true;
+            p4.Location = new Point(613, 8);
+            p4.Name = "p4";
+            p4.Size = new Size(44, 15);
+            p4.TabIndex = 12;
+            p4.Text = "param:";
+            p4.Visible = false;
             // 
             // numericUpDown8
             // 
@@ -215,15 +228,17 @@
             numericUpDown8.Name = "numericUpDown8";
             numericUpDown8.Size = new Size(56, 23);
             numericUpDown8.TabIndex = 17;
+            numericUpDown8.Visible = false;
             // 
-            // label9
+            // p6
             // 
-            label9.AutoSize = true;
-            label9.Location = new Point(837, 8);
-            label9.Name = "label9";
-            label9.Size = new Size(44, 15);
-            label9.TabIndex = 16;
-            label9.Text = "param:";
+            p6.AutoSize = true;
+            p6.Location = new Point(837, 8);
+            p6.Name = "p6";
+            p6.Size = new Size(44, 15);
+            p6.TabIndex = 16;
+            p6.Text = "param:";
+            p6.Visible = false;
             // 
             // label8
             // 
@@ -261,20 +276,20 @@
             Controls.Add(label8);
             Controls.Add(comboBox1);
             Controls.Add(numericUpDown8);
-            Controls.Add(label9);
+            Controls.Add(p6);
             Controls.Add(numericUpDown5);
-            Controls.Add(label6);
+            Controls.Add(p5);
             Controls.Add(numericUpDown6);
-            Controls.Add(label7);
+            Controls.Add(p4);
             Controls.Add(numericUpDown3);
-            Controls.Add(label4);
+            Controls.Add(p3);
             Controls.Add(numericUpDown4);
-            Controls.Add(label5);
+            Controls.Add(p2);
             Controls.Add(numericUpDown2);
-            Controls.Add(label3);
+            Controls.Add(p1);
             Controls.Add(numericUpDown1);
             Controls.Add(button1);
-            Controls.Add(label2);
+            Controls.Add(p0);
             Controls.Add(label1);
             Controls.Add(zasobnikFigur);
             Controls.Add(panel1);
@@ -296,21 +311,21 @@
         private Panel panel1;
         private ComboBox zasobnikFigur;
         private Label label1;
-        private Label label2;
+        private Label p0;
         private Button button1;
         private NumericUpDown numericUpDown1;
         private NumericUpDown numericUpDown2;
-        private Label label3;
+        private Label p1;
         private NumericUpDown numericUpDown3;
-        private Label label4;
+        private Label p3;
         private NumericUpDown numericUpDown4;
-        private Label label5;
+        private Label p2;
         private NumericUpDown numericUpDown5;
-        private Label label6;
+        private Label p5;
         private NumericUpDown numericUpDown6;
-        private Label label7;
+        private Label p4;
         private NumericUpDown numericUpDown8;
-        private Label label9;
+        private Label p6;
         private Label label8;
         private ComboBox comboBox1;
         private Button button2;
