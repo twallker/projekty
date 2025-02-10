@@ -49,6 +49,7 @@
             label8 = new Label();
             userFig = new ComboBox();
             button2 = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)v0).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v3).BeginInit();
@@ -96,7 +97,7 @@
             // 
             // Dodaj
             // 
-            Dodaj.Location = new Point(957, 5);
+            Dodaj.Location = new Point(246, 34);
             Dodaj.Name = "Dodaj";
             Dodaj.Size = new Size(75, 23);
             Dodaj.TabIndex = 4;
@@ -262,11 +263,21 @@
             button2.Text = "Usuń";
             button2.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            button1.Location = new Point(327, 33);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 20;
+            button1.Text = "Aktualizuj";
+            button1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1044, 584);
+            Controls.Add(button1);
             Controls.Add(button2);
             Controls.Add(label8);
             Controls.Add(userFig);
@@ -324,5 +335,6 @@
         private Label label8;
         private ComboBox userFig;
         private Button button2;
+        private Button button1;
     }
 }
