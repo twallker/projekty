@@ -48,8 +48,8 @@
             p6 = new Label();
             label8 = new Label();
             userFig = new ComboBox();
-            button2 = new Button();
-            button1 = new Button();
+            Usuń = new Button();
+            Aktualizuj = new Button();
             ((System.ComponentModel.ISupportInitialize)v0).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v3).BeginInit();
@@ -254,31 +254,32 @@
             userFig.TabIndex = 18;
             userFig.SelectionChangeCommitted += userFig_SelectionChangeCommitted;
             // 
-            // button2
+            // Usuń
             // 
-            button2.Location = new Point(165, 33);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 20;
-            button2.Text = "Usuń";
-            button2.UseVisualStyleBackColor = true;
+            Usuń.Location = new Point(165, 33);
+            Usuń.Name = "Usuń";
+            Usuń.Size = new Size(75, 23);
+            Usuń.TabIndex = 20;
+            Usuń.Text = "Usuń";
+            Usuń.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // Aktualizuj
             // 
-            button1.Location = new Point(327, 33);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 20;
-            button1.Text = "Aktualizuj";
-            button1.UseVisualStyleBackColor = true;
+            Aktualizuj.Location = new Point(327, 33);
+            Aktualizuj.Name = "Aktualizuj";
+            Aktualizuj.Size = new Size(75, 23);
+            Aktualizuj.TabIndex = 20;
+            Aktualizuj.Text = "Aktualizuj";
+            Aktualizuj.UseVisualStyleBackColor = true;
+            Aktualizuj.Click += Aktualizuj_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1044, 584);
-            Controls.Add(button1);
-            Controls.Add(button2);
+            Controls.Add(Aktualizuj);
+            Controls.Add(Usuń);
             Controls.Add(label8);
             Controls.Add(userFig);
             Controls.Add(v6);
@@ -334,7 +335,7 @@
         private Label p6;
         private Label label8;
         private ComboBox userFig;
-        private Button button2;
-        private Button button1;
+        private Button Usuń;
+        private Button Aktualizuj;
     }
 }

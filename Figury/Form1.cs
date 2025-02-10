@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Figury
 {
@@ -11,7 +12,6 @@ namespace Figury
         public Form1()
         {
             InitializeComponent();
-            IFigury.licznik = 0;
             dostępneParametry = [p0, p1, p2, p3, p4, p5, p6];
             dostępneWartosci = [v0, v1, v2, v3, v4, v5, v6];
             if (dostępneParametry.Count != dostępneWartosci.Count)
@@ -26,50 +26,49 @@ namespace Figury
             figuries = new List<IFigury>();
         }
 
+        private void AktualizujParametry(ReadOnlyCollection<string> etykiety, List<decimal> wartości)
+        {
+            if (etykiety.Count != wartości.Count)
+            {
+                throw new InvalidOperationException("Ilość parametrów i wartości defaultowych sie nie zgadza");
+            }
+            if (etykiety.Count > dostępneParametry.Count)
+            {
+                throw new InvalidOperationException("Brak miejsca na parametry");
+            }
+            for (int i = 0; i < dostępneParametry.Count; i++)
+            {
+                if (i < etykiety.Count)
+                {
+                    dostępneParametry[i].Text = etykiety[i];
+                    dostępneParametry[i].Visible = true;
+                    dostępneWartosci[i].Visible = true;
+                    dostępneWartosci[i].Value = wartości[i];
+                }
+                else
+                {
+                    dostępneParametry[i].Text = "";
+                    dostępneParametry[i].Visible = false;
+                    dostępneWartosci[i].Visible = false;
+                }
+            }
+        }
+
         private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)
         //private void zasobnikFigur_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            bool found = false;
             foreach (IFigury f in dostepneFigury)
             {
                 if (f.nazwa == zasobnikFigur.Text)
                 {
-                    found = true;
-                    var lista = f.GetParamNames;
-                    var defVal = f.GetDefaultVal;
-                    if (lista.Count != defVal.Count)
-                    {
-                        throw new InvalidOperationException("Ilość parametrów i wartości defaultowych sie nie zgadza");
-                    }
-                    if (lista.Count > dostępneParametry.Count)
-                    {
-                        throw new InvalidOperationException("Brak miejsca na parametry");
-                    }
-                    for (int i = 0; i < dostępneParametry.Count; i++)
-                    {
-                        if (i < lista.Count)
-                        {
-                            dostępneParametry[i].Text = lista[i];
-                            dostępneParametry[i].Visible = true;
-                            dostępneWartosci[i].Visible = true;
-                            dostępneWartosci[i].Value = defVal[i];
-                        }
-                        else
-                        {
-                            dostępneParametry[i].Text = "";
-                            dostępneParametry[i].Visible = false;
-                            dostępneWartosci[i].Visible = false;
-                        }
-                    }
+                    AktualizujParametry(f.GetParamNames, f.GetDefaultVal);
+                    return;
                 }
             }
-            if (!found)
+            for (int i = 0; i < dostępneParametry.Count; i++)
             {
-                for (int i = 0; i < dostępneParametry.Count; i++)
-                {
-                    dostępneParametry[i].Visible = false;
-                    dostępneWartosci[i].Visible = false;
-                }
+                dostępneParametry[i].Visible = false;
+                dostępneWartosci[i].Visible = false;
             }
         }
 
@@ -82,24 +81,53 @@ namespace Figury
 
                     IFigury obj = (IFigury)Activator.CreateInstance(f.GetType());
                     if (obj == null) { throw new InvalidOperationException("Nie utworzono biektu!"); }
-                    figuries.Add(obj);
-                    string nazwa = obj.nazwa + "_" + obj.id;
-                    userFig.Items.Add(nazwa);
-                    userFig.Text = nazwa;
                     List<decimal> param = new List<decimal>();
                     foreach (System.Windows.Forms.NumericUpDown l in dostępneWartosci)
                     {
                         if (l.Visible) param.Add(l.Value);
                     }
-                    obj.SetParameters(param);
+
+                    if (obj.SetParameters(param))
+                    {//parametry przyjęte
+                        figuries.Add(obj);
+                        string nazwa = obj.nazwa + "_" + obj.id;
+                        userFig.Items.Add(nazwa);
+                        userFig.Text = nazwa;
+                        IFigury.licznik++;
+                    }
                 }
             }
         }
 
         private void userFig_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            this.Text = IFigury.licznik.ToString();
-            IFigury.licznik++;
+            //uaktualnij kontrolki po wybraniu figury z zapamiętanej listy
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    AktualizujParametry(f.GetParamNames, f.m_parametry);
+                    return;
+                }
+            }
+        }
+
+        private void Aktualizuj_Click(object sender, EventArgs e)
+        {
+            //uaktualnij parametry w figurach
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    List<decimal> param = new List<decimal>();
+                    foreach (System.Windows.Forms.NumericUpDown l in dostępneWartosci)
+                    {
+                        if (l.Visible) param.Add(l.Value);
+                    }
+                    f.SetParameters(param);
+                    return;
+                }
+            }
         }
     }
     public abstract class IFigury
@@ -107,18 +135,21 @@ namespace Figury
         public IFigury()
         {
             nazwa = this.GetType().Name;
-            id = licznik++;
+            m_parametry = new List<decimal>();
+            id = licznik;
         }
 
         public static int licznik = 0;
 
-        public int id { get; }
+        public int id { get; private set; }
 
         public string nazwa { get;  }
 
+        public List<decimal> m_parametry { get; private set; }
+
         public abstract ReadOnlyCollection<string> GetParamNames { get; }
 
-        public abstract ReadOnlyCollection<int> GetDefaultVal { get; }
+        public abstract List<decimal> GetDefaultVal { get; }
 
         virtual public bool SetParameters(List<decimal> parametry)
         {
@@ -126,58 +157,53 @@ namespace Figury
             { 
                 return false; 
             }
+            m_parametry = parametry;
             return true;
         }
     }
 
     public class Prostokąt : IFigury
     {
-        private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
-        public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 10, 20, 0, 0 }.AsReadOnly(); } }
+        public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 20, 0, 0 }; } }
 
         override public bool SetParameters(List<decimal> parametry)
         {
-            if ((base.SetParameters(parametry) == false) || (parametry[0] <= 0) || (parametry[1]) <= 0)
+            if ((parametry[0] <= 0) || (parametry[1]) <= 0)
             {
                 return false;
-            }
-            m_parametry = parametry;
-            return true;
+            }            
+            return base.SetParameters(parametry);
         }
     }
 
     public class Kwadrat : IFigury
     {
-        private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
-        public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 10, 0, 0 }.AsReadOnly(); } }
+        public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 0, 0 }; } }
 
-        public new bool SetParameters(List<decimal> parametry)
+        override public bool SetParameters(List<decimal> parametry)
         {
-            if ((base.SetParameters(parametry) == false) || (parametry[0] <= 0))
+            if (parametry[0] <= 0)
             {
                 return false;
             }
-            m_parametry = parametry;
-            return true;
+            return base.SetParameters(parametry);
         }
     }
 
     public class Koło : IFigury
     {
-        private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
-        public override ReadOnlyCollection<int> GetDefaultVal { get { return new List<int> { 20, 0, 0 }.AsReadOnly(); } }
+        public override List<decimal> GetDefaultVal { get { return new List<decimal> { 20, 0, 0 }; } }
 
-        public new bool SetParameters(List<decimal> parametry)
+        override public bool SetParameters(List<decimal> parametry)
         {
-            if ((base.SetParameters(parametry) == false) || (parametry[0] <= 0))
+            if (parametry[0] <= 0)
             {
                 return false;
             }
-            m_parametry = parametry;
-            return true;
+            return base.SetParameters(parametry);
         }
     }
 }
