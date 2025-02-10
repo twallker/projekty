@@ -1,22 +1,22 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 
 namespace Figury
 {
     public partial class Form1 : Form
     {
-        private List<IFigury> dostepneFigury = [new Prostok¹t(), new Kwadrat(), new Ko³o()];
-        private List<System.Windows.Forms.NumericUpDown> dostêpneWartosci;
-        private List<System.Windows.Forms.Label> dostêpneParametry;
+        private List<IFigury> dostepneFigury = [new ProstokÄ…t(), new Kwadrat(), new KoÅ‚o()];
+        private List<System.Windows.Forms.NumericUpDown> dostÃªpneWartosci;
+        private List<System.Windows.Forms.Label> dostÃªpneParametry;
         private List<IFigury> figuries;
         public Form1()
         {
             InitializeComponent();
             IFigury.licznik = 0;
-            dostêpneParametry = [p0, p1, p2, p3, p4, p5, p6];
-            dostêpneWartosci = [v0, v1, v2, v3, v4, v5, v6];
-            if (dostêpneParametry.Count != dostêpneWartosci.Count)
+            dostÃªpneParametry = [p0, p1, p2, p3, p4, p5, p6];
+            dostÃªpneWartosci = [v0, v1, v2, v3, v4, v5, v6];
+            if (dostÃªpneParametry.Count != dostÃªpneWartosci.Count)
             {
-                throw new InvalidOperationException("Musi byæ równa iloœæ opisów i wartoœci");
+                throw new InvalidOperationException("Musi byÃ¦ rÃ³wna iloÅ“Ã¦ opisÃ³w i wartoÅ“ci");
             }
             foreach (IFigury f in dostepneFigury)
             {
@@ -39,36 +39,36 @@ namespace Figury
                     var defVal = f.GetDefaultVal;
                     if (lista.Count != defVal.Count)
                     {
-                        throw new InvalidOperationException("Iloœæ parametrów i wartoœci defaultowych sie nie zgadza");
+                        throw new InvalidOperationException("IloÅ›Ä‡ parametrÃ³w i wartoÅ›ci defaultowych sie nie zgadza");
                     }
-                    if (lista.Count > dostêpneParametry.Count)
+                    if (lista.Count > dostÃªpneParametry.Count)
                     {
                         throw new InvalidOperationException("Brak miejsca na parametry");
                     }
-                    for (int i = 0; i < dostêpneParametry.Count; i++)
+                    for (int i = 0; i < dostÃªpneParametry.Count; i++)
                     {
                         if (i < lista.Count)
                         {
-                            dostêpneParametry[i].Text = lista[i];
-                            dostêpneParametry[i].Visible = true;
-                            dostêpneWartosci[i].Visible = true;
-                            dostêpneWartosci[i].Value = defVal[i];
+                            dostÃªpneParametry[i].Text = lista[i];
+                            dostÃªpneParametry[i].Visible = true;
+                            dostÃªpneWartosci[i].Visible = true;
+                            dostÃªpneWartosci[i].Value = defVal[i];
                         }
                         else
                         {
-                            dostêpneParametry[i].Text = "";
-                            dostêpneParametry[i].Visible = false;
-                            dostêpneWartosci[i].Visible = false;
+                            dostÃªpneParametry[i].Text = "";
+                            dostÃªpneParametry[i].Visible = false;
+                            dostÃªpneWartosci[i].Visible = false;
                         }
                     }
                 }
             }
             if (!found)
             {
-                for (int i = 0; i < dostêpneParametry.Count; i++)
+                for (int i = 0; i < dostÃªpneParametry.Count; i++)
                 {
-                    dostêpneParametry[i].Visible = false;
-                    dostêpneWartosci[i].Visible = false;
+                    dostÃªpneParametry[i].Visible = false;
+                    dostÃªpneWartosci[i].Visible = false;
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace Figury
                     userFig.Items.Add(nazwa);
                     userFig.Text = nazwa;
                     List<decimal> param = new List<decimal>();
-                    foreach (System.Windows.Forms.NumericUpDown l in dostêpneWartosci)
+                    foreach (System.Windows.Forms.NumericUpDown l in dostÃªpneWartosci)
                     {
                         if (l.Visible) param.Add(l.Value);
                     }
@@ -130,7 +130,7 @@ namespace Figury
         }
     }
 
-    public class Prostok¹t : IFigury
+    public class ProstokÄ…t : IFigury
     {
         private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
@@ -164,7 +164,7 @@ namespace Figury
         }
     }
 
-    public class Ko³o : IFigury
+    public class KoÅ‚o : IFigury
     {
         private List<decimal> m_parametry = new List<decimal>();
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
