@@ -129,6 +129,20 @@ namespace Figury
                 }
             }
         }
+
+        private void Usuń_Click(object sender, EventArgs e)
+        {
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    userFig.Items.Remove(f.nazwa + "_" + f.id);
+                    figuries.Remove(f);
+                    zasobnikFigur_SelectedIndexChanged(sender, e);
+                    return;
+                }
+            }
+        }
     }
     public abstract class IFigury
     {
@@ -160,6 +174,8 @@ namespace Figury
             m_parametry = parametry;
             return true;
         }
+
+        abstract public void Rysuj();
     }
 
     public class Prostokąt : IFigury
@@ -174,6 +190,11 @@ namespace Figury
                 return false;
             }            
             return base.SetParameters(parametry);
+        }
+
+        public override void Rysuj()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -190,6 +211,10 @@ namespace Figury
             }
             return base.SetParameters(parametry);
         }
+        public override void Rysuj()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Koło : IFigury
@@ -204,6 +229,10 @@ namespace Figury
                 return false;
             }
             return base.SetParameters(parametry);
+        }
+        public override void Rysuj()
+        {
+            throw new NotImplementedException();
         }
     }
 }

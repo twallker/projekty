@@ -262,6 +262,7 @@
             Usuń.TabIndex = 20;
             Usuń.Text = "Usuń";
             Usuń.UseVisualStyleBackColor = true;
+            Usuń.Click += Usuń_Click;
             // 
             // Aktualizuj
             // 
