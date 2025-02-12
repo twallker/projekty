@@ -54,8 +54,17 @@ namespace Figury
             }
         }
 
-        private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)
-        //private void zasobnikFigur_SelectionChangeCommitted(object sender, EventArgs e)
+        private void Rysuj()
+        {
+            Graphics g = panelRysuj.CreateGraphics();
+            g.Clear(BackColor);
+            foreach (IFigury f in figuries)
+            {
+                f.Rysuj(g, panelRysuj.Width, panelRysuj.Height);
+            }
+        }
+
+        private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)        
         {
             foreach (IFigury f in dostepneFigury)
             {
@@ -73,7 +82,7 @@ namespace Figury
         }
 
         private void button1_Click(object sender, EventArgs e)
-        {
+        {//dodaj nową figurę
             foreach (IFigury f in dostepneFigury)
             {
                 if (f.nazwa == zasobnikFigur.Text)
@@ -95,6 +104,7 @@ namespace Figury
                         userFig.Text = nazwa;
                         IFigury.licznik++;
                     }
+                    Rysuj();
                 }
             }
         }
@@ -175,7 +185,7 @@ namespace Figury
             return true;
         }
 
-        abstract public void Rysuj();
+        abstract public void Rysuj(Graphics g, int width, int height);
     }
 
     public class Prostokąt : IFigury
@@ -192,9 +202,19 @@ namespace Figury
             return base.SetParameters(parametry);
         }
 
-        public override void Rysuj()
+        public override void Rysuj(Graphics g, int width, int height)
         {
-            throw new NotImplementedException();
+            float wysHalf = (float)m_parametry[0]/2;
+            float szerHalf = (float)m_parametry[1]/2;
+            PointF[] punkty = new PointF[4];
+            punkty[0] = new PointF(-szerHalf, wysHalf);
+            punkty[1] = new PointF(szerHalf, wysHalf);
+            punkty[2] = new PointF(szerHalf, -wysHalf);
+            punkty[3] = new PointF(-szerHalf, -wysHalf);            
+            //Random rnd = new Random();
+            //Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
+            Pen pen = new Pen(Color.DarkGreen);
+            g.DrawPolygon(pen, punkty);
         }
     }
 
@@ -211,7 +231,7 @@ namespace Figury
             }
             return base.SetParameters(parametry);
         }
-        public override void Rysuj()
+        public override void Rysuj(Graphics g, int width, int height)
         {
             throw new NotImplementedException();
         }
@@ -230,7 +250,7 @@ namespace Figury
             }
             return base.SetParameters(parametry);
         }
-        public override void Rysuj()
+        public override void Rysuj(Graphics g, int width, int height)
         {
             throw new NotImplementedException();
         }

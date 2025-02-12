@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
+            panelRysuj = new Panel();
             zasobnikFigur = new ComboBox();
             label1 = new Label();
             p0 = new Label();
@@ -59,12 +59,12 @@
             ((System.ComponentModel.ISupportInitialize)v6).BeginInit();
             SuspendLayout();
             // 
-            // panel1
+            // panelRysuj
             // 
-            panel1.Location = new Point(12, 88);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(1020, 484);
-            panel1.TabIndex = 0;
+            panelRysuj.Location = new Point(12, 88);
+            panelRysuj.Name = "panelRysuj";
+            panelRysuj.Size = new Size(1020, 484);
+            panelRysuj.TabIndex = 0;
             // 
             // zasobnikFigur
             // 
@@ -300,7 +300,7 @@
             Controls.Add(p0);
             Controls.Add(label1);
             Controls.Add(zasobnikFigur);
-            Controls.Add(panel1);
+            Controls.Add(panelRysuj);
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)v0).EndInit();
@@ -316,7 +316,7 @@
 
         #endregion
 
-        private Panel panel1;
+        private Panel panelRysuj;
         private ComboBox zasobnikFigur;
         private Label label1;
         private Label p0;
