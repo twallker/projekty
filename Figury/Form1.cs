@@ -7,17 +7,20 @@ namespace Figury
     {
         private List<IFigury> dostepneFigury = [new Prostokąt(), new Kwadrat(), new Koło()];
         private List<System.Windows.Forms.NumericUpDown> dostępneWartosci;
-        private List<System.Windows.Forms.Label> dostępneParametry;
+        //private List<System.Windows.Forms.Label> dostępneParametry;
+        private List<Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown>> dostępneKontrolki;
         private List<IFigury> figuries;
         public Form1()
         {
             InitializeComponent();
-            dostępneParametry = [p0, p1, p2, p3, p4, p5, p6];
+            dostępneKontrolki = [Tuple.Create(p0,v0), Tuple.Create(p1, v1), Tuple.Create(p2, v2),
+                                 Tuple.Create(p3, v3), Tuple.Create(p4, v4), Tuple.Create(p5, v5), Tuple.Create(p6, v6)];
+            //dostępneParametry = [p0, p1, p2, p3, p4, p5, p6];
             dostępneWartosci = [v0, v1, v2, v3, v4, v5, v6];
-            if (dostępneParametry.Count != dostępneWartosci.Count)
-            {
-                throw new InvalidOperationException("Musi być równa ilość opisów i wartości");
-            }
+            //if (dostępneParametry.Count != dostępneWartosci.Count)
+            //{
+            //    throw new InvalidOperationException("Musi być równa ilość opisów i wartości");
+            //}
             foreach (IFigury f in dostepneFigury)
             {
                 zasobnikFigur.Items.Add(f.nazwa);
@@ -54,26 +57,26 @@ namespace Figury
         //    }
         //}
 
-        private void AktualizujParametry2(Dictionary<string, float> parametry)
+        private void AktualizujParametry2(Dictionary<string, decimal> parametry)
         {            
-            if (parametry.Count > dostępneParametry.Count)
+            if (parametry.Count > dostępneKontrolki.Count)
             {
                 throw new InvalidOperationException("Brak miejsca na parametry");
             }
-            for (int i = 0; i < dostępneParametry.Count; i++)
+            for (int i = 0; i < dostępneKontrolki.Count; i++)
             {
                 if (i < parametry.Count)
                 {
-                    dostępneParametry[i].Text = parametry.ElementAt(i).Key;
-                    dostępneParametry[i].Visible = true;
-                    dostępneWartosci[i].Value = (decimal)parametry.ElementAt(i).Value;
-                    dostępneWartosci[i].Visible = true;
+                    dostępneKontrolki[i].Item1.Text = parametry.ElementAt(i).Key;
+                    dostępneKontrolki[i].Item1.Visible = true;
+                    dostępneKontrolki[i].Item2.Value = parametry.ElementAt(i).Value;
+                    dostępneKontrolki[i].Item2.Visible = true;
                 }
                 else
                 {
-                    dostępneParametry[i].Text = "";
-                    dostępneParametry[i].Visible = false;
-                    dostępneWartosci[i].Visible = false;
+                    dostępneKontrolki[i].Item1.Text = "";
+                    dostępneKontrolki[i].Item1.Visible = false;
+                    dostępneKontrolki[i].Item2.Visible = false;
                 }
             }
         }
@@ -99,10 +102,10 @@ namespace Figury
                     return;
                 }
             }
-            for (int i = 0; i < dostępneParametry.Count; i++)
+            for (int i = 0; i < dostępneKontrolki.Count; i++)
             {
-                dostępneParametry[i].Visible = false;
-                dostępneWartosci[i].Visible = false;
+                dostępneKontrolki[i].Item1.Visible = false;
+                dostępneKontrolki[i].Item2.Visible = false;
             }
         }
 
@@ -110,11 +113,43 @@ namespace Figury
         {//dodaj nową figurę
             foreach (IFigury f in dostepneFigury)
             {
+                //if (f.nazwa == zasobnikFigur.Text)
+                //{
+
+                //    IFigury obj = (IFigury)Activator.CreateInstance(f.GetType());
+                //    if (obj == null) { throw new InvalidOperationException("Nie utworzono biektu!"); }
+                //    List<decimal> param = new List<decimal>();
+                //    foreach (System.Windows.Forms.NumericUpDown l in dostępneWartosci)
+                //    {
+                //        if (l.Visible) param.Add(l.Value);
+                //    }
+
+                //    if (obj.SetParameters(param))
+                //    {//parametry przyjęte
+                //        figuries.Add(obj);
+                //        string nazwa = obj.nazwa + "_" + obj.id;
+                //        userFig.Items.Add(nazwa);
+                //        userFig.Text = nazwa;
+                //        IFigury.licznik++;
+                //    }
+                //    Rysuj();
+                //}
                 if (f.nazwa == zasobnikFigur.Text)
                 {
 
                     IFigury obj = (IFigury)Activator.CreateInstance(f.GetType());
                     if (obj == null) { throw new InvalidOperationException("Nie utworzono biektu!"); }
+
+                    bool paramsOk = true;
+                    foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
+                    {
+                        if (para.Item2.Visible)
+                        {
+                            obj.SetParam(para.Item1.Text, para.Item2.Value);
+                        }
+                    }
+
+
                     List<decimal> param = new List<decimal>();
                     foreach (System.Windows.Forms.NumericUpDown l in dostępneWartosci)
                     {
@@ -195,7 +230,10 @@ namespace Figury
 
         public string nazwa { get;  }
 
-        public abstract Dictionary<string, float> GetParams { get; }
+        public abstract Dictionary<string, decimal> GetParams { get; }
+
+        public abstract bool SetParam(string key, decimal value);
+
 
         public List<decimal> m_parametry { get; private set; }
 
@@ -218,8 +256,19 @@ namespace Figury
 
     public class Prostokąt : IFigury
     {
-        public Dictionary<string, float> m_parametryf = new Dictionary<string, float> { { "Wys", 10 }, { "Szer", 20 }, { "X", 0 }, { "Y", 0 } };
-        public override Dictionary<string, float> GetParams { get { return m_parametryf; } }
+        public Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Wys", 10 }, { "Szer", 20 }, { "X", 0 }, { "Y", 0 } };
+        public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
+
+        public override bool SetParam(string key, decimal value)
+        {
+            if (!m_parametryf.ContainsKey(key))
+            {
+                return false;
+            }
+
+            m_parametryf["not"] = 5;
+            return false;
+        }
 
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 20, 0, 0 }; } }
@@ -251,8 +300,14 @@ namespace Figury
 
     public class Kwadrat : IFigury
     {
-        public Dictionary<string, float> m_parametryf = new Dictionary<string, float> { { "Bok", 20 }, { "X", 0 }, { "Y", 0 } };
-        public override Dictionary<string, float> GetParams { get { return m_parametryf; } }
+        public Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 20 }, { "X", 0 }, { "Y", 0 } };
+        public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
+
+        public override bool SetParam(string key, decimal value)
+        {
+            return false;
+        }
+
 
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 0, 0 }; } }
@@ -273,8 +328,15 @@ namespace Figury
 
     public class Koło : IFigury
     {
-        public Dictionary<string, float> m_parametryf = new Dictionary<string, float> { { "R", 30 }, { "X", 0 }, { "Y", 0 } };
-        public override Dictionary<string, float> GetParams { get { return m_parametryf; } }
+        public Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "R", 30 }, { "X", 0 }, { "Y", 0 } };
+        public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
+
+        public override bool SetParam(string key, decimal value)
+        {
+            return false;
+        }
+
+
 
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return new List<decimal> { 20, 0, 0 }; } }
