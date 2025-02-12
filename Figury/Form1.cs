@@ -26,24 +26,48 @@ namespace Figury
             figuries = new List<IFigury>();
         }
 
-        private void AktualizujParametry(ReadOnlyCollection<string> etykiety, List<decimal> wartości)
-        {
-            if (etykiety.Count != wartości.Count)
-            {
-                throw new InvalidOperationException("Ilość parametrów i wartości defaultowych sie nie zgadza");
-            }
-            if (etykiety.Count > dostępneParametry.Count)
+        //private void AktualizujParametry_sks(ReadOnlyCollection<string> etykiety, List<decimal> wartości)
+        //{
+        //    if (etykiety.Count != wartości.Count)
+        //    {
+        //        throw new InvalidOperationException("Ilość parametrów i wartości defaultowych sie nie zgadza");
+        //    }
+        //    if (etykiety.Count > dostępneParametry.Count)
+        //    {
+        //        throw new InvalidOperationException("Brak miejsca na parametry");
+        //    }
+        //    for (int i = 0; i < dostępneParametry.Count; i++)
+        //    {
+        //        if (i < etykiety.Count)
+        //        {
+        //            dostępneParametry[i].Text = etykiety[i];
+        //            dostępneParametry[i].Visible = true;
+        //            dostępneWartosci[i].Visible = true;
+        //            dostępneWartosci[i].Value = wartości[i];
+        //        }
+        //        else
+        //        {
+        //            dostępneParametry[i].Text = "";
+        //            dostępneParametry[i].Visible = false;
+        //            dostępneWartosci[i].Visible = false;
+        //        }
+        //    }
+        //}
+
+        private void AktualizujParametry2(Dictionary<string, float> parametry)
+        {            
+            if (parametry.Count > dostępneParametry.Count)
             {
                 throw new InvalidOperationException("Brak miejsca na parametry");
             }
             for (int i = 0; i < dostępneParametry.Count; i++)
             {
-                if (i < etykiety.Count)
+                if (i < parametry.Count)
                 {
-                    dostępneParametry[i].Text = etykiety[i];
+                    dostępneParametry[i].Text = parametry.ElementAt(i).Key;
                     dostępneParametry[i].Visible = true;
+                    dostępneWartosci[i].Value = (decimal)parametry.ElementAt(i).Value;
                     dostępneWartosci[i].Visible = true;
-                    dostępneWartosci[i].Value = wartości[i];
                 }
                 else
                 {
@@ -70,7 +94,8 @@ namespace Figury
             {
                 if (f.nazwa == zasobnikFigur.Text)
                 {
-                    AktualizujParametry(f.GetParamNames, f.GetDefaultVal);
+                    //AktualizujParametry(f.GetParamNames, f.GetDefaultVal);
+                    AktualizujParametry2(f.GetParams);
                     return;
                 }
             }
@@ -116,7 +141,8 @@ namespace Figury
             {
                 if (userFig.Text == f.nazwa + "_" + f.id)
                 {
-                    AktualizujParametry(f.GetParamNames, f.m_parametry);
+                    //AktualizujParametry(f.GetParamNames, f.m_parametry);
+                    AktualizujParametry2(f.GetParams);
                     return;
                 }
             }
@@ -169,6 +195,8 @@ namespace Figury
 
         public string nazwa { get;  }
 
+        public abstract Dictionary<string, float> GetParams { get; }
+
         public List<decimal> m_parametry { get; private set; }
 
         public abstract ReadOnlyCollection<string> GetParamNames { get; }
@@ -190,6 +218,9 @@ namespace Figury
 
     public class Prostokąt : IFigury
     {
+        public Dictionary<string, float> m_parametryf = new Dictionary<string, float> { { "Wys", 10 }, { "Szer", 20 }, { "X", 0 }, { "Y", 0 } };
+        public override Dictionary<string, float> GetParams { get { return m_parametryf; } }
+
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 20, 0, 0 }; } }
 
@@ -220,6 +251,9 @@ namespace Figury
 
     public class Kwadrat : IFigury
     {
+        public Dictionary<string, float> m_parametryf = new Dictionary<string, float> { { "Bok", 20 }, { "X", 0 }, { "Y", 0 } };
+        public override Dictionary<string, float> GetParams { get { return m_parametryf; } }
+
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 0, 0 }; } }
 
@@ -239,6 +273,9 @@ namespace Figury
 
     public class Koło : IFigury
     {
+        public Dictionary<string, float> m_parametryf = new Dictionary<string, float> { { "R", 30 }, { "X", 0 }, { "Y", 0 } };
+        public override Dictionary<string, float> GetParams { get { return m_parametryf; } }
+
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return new List<decimal> { 20, 0, 0 }; } }
 
