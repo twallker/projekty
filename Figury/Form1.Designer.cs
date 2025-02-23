@@ -87,12 +87,13 @@
             // 
             // p0
             // 
-            p0.AutoSize = true;
             p0.Location = new Point(165, 8);
             p0.Name = "p0";
+            p0.RightToLeft = RightToLeft.No;
             p0.Size = new Size(44, 15);
             p0.TabIndex = 3;
             p0.Text = "param:";
+            p0.TextAlign = ContentAlignment.MiddleRight;
             p0.Visible = false;
             // 
             // Dodaj
@@ -127,12 +128,12 @@
             // 
             // p1
             // 
-            p1.AutoSize = true;
             p1.Location = new Point(277, 8);
             p1.Name = "p1";
             p1.Size = new Size(44, 15);
             p1.TabIndex = 6;
             p1.Text = "param:";
+            p1.TextAlign = ContentAlignment.MiddleRight;
             p1.Visible = false;
             // 
             // v3
@@ -147,12 +148,12 @@
             // 
             // p3
             // 
-            p3.AutoSize = true;
             p3.Location = new Point(501, 7);
             p3.Name = "p3";
             p3.Size = new Size(44, 15);
             p3.TabIndex = 10;
             p3.Text = "param:";
+            p3.TextAlign = ContentAlignment.MiddleRight;
             p3.Visible = false;
             // 
             // v2
@@ -167,12 +168,12 @@
             // 
             // p2
             // 
-            p2.AutoSize = true;
             p2.Location = new Point(389, 7);
             p2.Name = "p2";
             p2.Size = new Size(44, 15);
             p2.TabIndex = 8;
             p2.Text = "param:";
+            p2.TextAlign = ContentAlignment.MiddleRight;
             p2.Visible = false;
             // 
             // v5
@@ -187,12 +188,12 @@
             // 
             // p5
             // 
-            p5.AutoSize = true;
             p5.Location = new Point(725, 8);
             p5.Name = "p5";
             p5.Size = new Size(44, 15);
             p5.TabIndex = 14;
             p5.Text = "param:";
+            p5.TextAlign = ContentAlignment.MiddleRight;
             p5.Visible = false;
             // 
             // v4
@@ -207,12 +208,12 @@
             // 
             // p4
             // 
-            p4.AutoSize = true;
             p4.Location = new Point(613, 8);
             p4.Name = "p4";
             p4.Size = new Size(44, 15);
             p4.TabIndex = 12;
             p4.Text = "param:";
+            p4.TextAlign = ContentAlignment.MiddleRight;
             p4.Visible = false;
             // 
             // v6
@@ -227,12 +228,12 @@
             // 
             // p6
             // 
-            p6.AutoSize = true;
             p6.Location = new Point(837, 8);
             p6.Name = "p6";
             p6.Size = new Size(44, 15);
             p6.TabIndex = 16;
             p6.Text = "param:";
+            p6.TextAlign = ContentAlignment.MiddleRight;
             p6.Visible = false;
             // 
             // label8

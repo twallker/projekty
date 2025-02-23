@@ -54,7 +54,16 @@ namespace Figury
             g.Clear(BackColor);
             foreach (IFigury f in figuries)
             {
-                f.Rysuj(g, panelRysuj.Width, panelRysuj.Height);
+                Pen pen;
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    pen = new Pen(Color.Red);
+                }
+                else
+                {
+                    pen = new Pen(Color.DarkGreen);
+                }
+                f.Rysuj(g, panelRysuj.Width, panelRysuj.Height, pen);
             }
         }
 
@@ -82,8 +91,7 @@ namespace Figury
                 if (f.nazwa == zasobnikFigur.Text)
                 {
 
-                    IFigury obj = (IFigury)Activator.CreateInstance(f.GetType());
-                    if (obj == null) { throw new InvalidOperationException("Nie utworzono biektu!"); }
+                    IFigury obj = f.CreateNewFig();
 
 
                     Dictionary<string, decimal> wartosci = new Dictionary<string, decimal>();
@@ -114,14 +122,9 @@ namespace Figury
             {
                 if (userFig.Text == f.nazwa + "_" + f.id)
                 {
-                    if (zasobnikFigur.Text == f.nazwa)
-                    {
-                        AktualizujParametry2(f.GetParams);//todo błąd!
-                    }
-                    else
-                    {
-                        zasobnikFigur.Text = f.nazwa;
-                    }
+                    zasobnikFigur.Text = f.nazwa;
+                    AktualizujParametry2(f.GetParams);
+                    Rysuj();
                     return;
                 }
             }
@@ -225,7 +228,9 @@ namespace Figury
             return true;
         }
 
-        abstract public void Rysuj(Graphics g, int width, int height);
+        abstract public void Rysuj(Graphics g, int width, int height, Pen pen);
+
+        abstract public IFigury CreateNewFig();
     }
 
     public class Prostokąt : IFigury
@@ -247,9 +252,9 @@ namespace Figury
         }
 
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
-        public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 20, 0, 0 }; } }
+        public override List<decimal> GetDefaultVal { get { return [10, 20, 0, 0]; } }
 
-        public override void Rysuj(Graphics g, int width, int height)
+        public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
             float wysHalf = (float)m_parametryf["Wys"]/2;
             float szerHalf = (float)m_parametryf["Szer"]/2;
@@ -262,8 +267,12 @@ namespace Figury
             punkty[3] = new PointF(-szerHalf+X, -wysHalf + Y);            
             ////Random rnd = new Random();
             ////Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
-            Pen pen = new Pen(Color.DarkGreen);
             g.DrawPolygon(pen, punkty);
+        }
+
+        public override IFigury CreateNewFig()
+        {
+            return new Prostokąt();
         }
     }
 
@@ -274,14 +283,22 @@ namespace Figury
 
         public override bool SetParameters(Dictionary<string, decimal> parametry)
         {
-            return true;
+            if (!CheckParameters(parametry))
+            {
+                return false;
+            }
+            if (parametry["Bok"] <= 0)
+            {
+                return false;
+            }
+            return base.SetParameters(parametry);
         }
 
 
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
-        public override List<decimal> GetDefaultVal { get { return new List<decimal> { 10, 0, 0 }; } }
+        public override List<decimal> GetDefaultVal { get { return [10, 0, 0]; } }
 
-        public override void Rysuj(Graphics g, int width, int height)
+        public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
             float bokHalf = (float)m_parametryf["Bok"] / 2;
             float X = (float)m_parametryf["X"] + width / 2;
@@ -293,8 +310,12 @@ namespace Figury
             punkty[3] = new PointF(-bokHalf + X, -bokHalf + Y);
             ////Random rnd = new Random();
             ////Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
-            Pen pen = new Pen(Color.DarkGreen);
             g.DrawPolygon(pen, punkty);
+        }
+
+        public override IFigury CreateNewFig()
+        {
+            return new Kwadrat();
         }
     }
 
@@ -304,17 +325,34 @@ namespace Figury
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
 
         public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
-        public override List<decimal> GetDefaultVal { get { return new List<decimal> { 20, 0, 0 }; } }
+        public override List<decimal> GetDefaultVal { get { return [20, 0, 0]; } }
 
-        public override void Rysuj(Graphics g, int width, int height)
+        public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
             float R = (float)m_parametryf["R"];
-            float X = (float)m_parametryf["X"] + width / 2 - R / 2;
-            float Y = -(float)m_parametryf["Y"] + height / 2 - R / 2;            
+            float X = (float)m_parametryf["X"] + width / 2 - R;
+            float Y = -(float)m_parametryf["Y"] + height / 2 - R;
             ////Random rnd = new Random();
             ////Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
-            Pen pen = new Pen(Color.DarkGreen);
-            g.DrawEllipse(pen, X, Y, R, R);
+            g.DrawEllipse(pen, X, Y, 2 * R, 2 * R);
+        }
+
+        public override bool SetParameters(Dictionary<string, decimal> parametry)
+        {
+            if (!CheckParameters(parametry))
+            {
+                return false;
+            }
+            if (parametry["R"] <= 0)
+            {
+                return false;
+            }
+            return base.SetParameters(parametry);
+        }
+
+        public override IFigury CreateNewFig()
+        {
+            return new Koło();
         }
     }
 }
