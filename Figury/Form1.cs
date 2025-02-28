@@ -5,7 +5,7 @@ namespace Figury
 {
     public partial class Form1 : Form
     {
-        private List<IFigury> dostepneFigury = [new Prostokąt(), new Kwadrat(), new Koło()];
+        private List<IFigury> dostepneFigury = [new Prostokąt(), new Kwadrat(), new Koło(), new Trójkąt()];
         private List<System.Windows.Forms.NumericUpDown> dostępneWartosci;
         //private List<System.Windows.Forms.Label> dostępneParametry;
         private List<Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown>> dostępneKontrolki;
@@ -354,5 +354,43 @@ namespace Figury
         {
             return new Koło();
         }
+    }
+
+    public class Trójkąt : IFigury
+    {
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 50 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };
+        public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
+        public override List<decimal> GetDefaultVal { get { return [20, 0, 0]; } }
+
+        public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y", "Obrót" }.AsReadOnly(); } }
+
+        public override IFigury CreateNewFig()
+        {
+            return new Trójkąt();
+        }
+
+        public override void Rysuj(Graphics g, int width, int height, Pen pen)
+        {
+            float X = (float)m_parametryf["X"] + width / 2;
+            float Y = -(float)m_parametryf["Y"] + height / 2;
+
+            float bok = (float)m_parametryf["Bok"];
+            float h = 0.866f * bok;
+
+            float X1 = -bok / 2;
+            float X2 = 0;
+            float X3 = bok / 2;
+
+            float Y1 = -h / 3;
+            float Y2 = h * 2 / 3;
+            float Y3 = Y1;
+            PointF[] punkty = new PointF[3];
+            punkty[0] = new PointF(X1 + X, Y - Y1);
+            punkty[1] = new PointF(X2 + X, Y - Y2);
+            punkty[2] = new PointF(X3 + X, Y - Y3);
+
+            g.DrawPolygon(pen, punkty);
+        }
+
     }
 }
