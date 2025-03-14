@@ -191,8 +191,6 @@ namespace Figury
 
         public abstract Dictionary<string, decimal> GetParams { get; }
 
-        public abstract ReadOnlyCollection<string> GetParamNames { get; }
-
         public abstract List<decimal> GetDefaultVal { get; }
 
         virtual public bool SetParameters(Dictionary<string, decimal> parametry)
@@ -230,12 +228,44 @@ namespace Figury
 
         abstract public void Rysuj(Graphics g, int width, int height, Pen pen);
 
+        virtual protected void Obrót(PointF[] punkty, double degRotate)
+        {
+            double radRotate = degRotate * Math.PI / 180;
+            for (int i = 0; i < punkty.Length; i++)
+            {
+                float x = punkty[i].X;
+                float y = punkty[i].Y;
+                punkty[i].X = (float)(x * Math.Cos(radRotate) - y * Math.Sin(radRotate));
+                punkty[i].Y = (float)(x * Math.Sin(radRotate) + y * Math.Cos(radRotate));
+            }
+        }
+
+        virtual protected void MoveXY(PointF[] punkty, float x, float y)
+        {
+            for (int i = 0; i < punkty.Length; i++)
+            {
+                punkty[i].X += x;
+                punkty[i].Y -= y;
+            }
+        }
+
+        virtual protected void KorektaWspółrzędnych(PointF[] punkty, int width, int height)
+        {
+            float w2 = width / 2;
+            float h2 = height / 2;
+            for (int i = 0; i < punkty.Length; i++)
+            {
+                punkty[i].X += w2;
+                punkty[i].Y = h2 - punkty[i].Y;
+            }
+        }
+
         abstract public IFigury CreateNewFig();
     }
 
     public class Prostokąt : IFigury
     {
-        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Wys", 10 }, { "Szer", 20 }, { "X", 0 }, { "Y", 0 } };        
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Wys", 10 }, { "Szer", 20 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };        
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
 
         public override bool SetParameters(Dictionary<string, decimal> parametry)
@@ -251,20 +281,22 @@ namespace Figury
             return base.SetParameters(parametry);
         }
 
-        public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Wys", "Szer", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return [10, 20, 0, 0]; } }
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
-            float wysHalf = (float)m_parametryf["Wys"]/2;
-            float szerHalf = (float)m_parametryf["Szer"]/2;
-            float X = (float)m_parametryf["X"] + width/2;
-            float Y = -(float)m_parametryf["Y"] + height/2;
+            float wysHalf = (float)m_parametryf["Wys"] / 2;
+            float szerHalf = (float)m_parametryf["Szer"] / 2;
             PointF[] punkty = new PointF[4];
-            punkty[0] = new PointF(-szerHalf+X, wysHalf+Y);
-            punkty[1] = new PointF(szerHalf+X, wysHalf+Y);
-            punkty[2] = new PointF(szerHalf+X, -wysHalf + Y);
-            punkty[3] = new PointF(-szerHalf+X, -wysHalf + Y);            
+            punkty[0] = new PointF(-szerHalf, wysHalf);
+            punkty[1] = new PointF(szerHalf, wysHalf);
+            punkty[2] = new PointF(szerHalf, -wysHalf);
+            punkty[3] = new PointF(-szerHalf, -wysHalf);
+
+            Obrót(punkty, (double)m_parametryf["Obrót"]);
+            MoveXY(punkty, (float)m_parametryf["X"], (float)m_parametryf["Y"]);
+            KorektaWspółrzędnych(punkty, width, height);
+          
             ////Random rnd = new Random();
             ////Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
             g.DrawPolygon(pen, punkty);
@@ -278,7 +310,7 @@ namespace Figury
 
     public class Kwadrat : IFigury
     {
-        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 20 }, { "X", 0 }, { "Y", 0 } };
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 20 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
 
         public override bool SetParameters(Dictionary<string, decimal> parametry)
@@ -294,20 +326,21 @@ namespace Figury
             return base.SetParameters(parametry);
         }
 
-
-        public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return [10, 0, 0]; } }
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
             float bokHalf = (float)m_parametryf["Bok"] / 2;
-            float X = (float)m_parametryf["X"] + width / 2;
-            float Y = -(float)m_parametryf["Y"] + height / 2;
             PointF[] punkty = new PointF[4];
-            punkty[0] = new PointF(-bokHalf + X, bokHalf + Y);
-            punkty[1] = new PointF(bokHalf + X, bokHalf + Y);
-            punkty[2] = new PointF(bokHalf + X, -bokHalf + Y);
-            punkty[3] = new PointF(-bokHalf + X, -bokHalf + Y);
+            punkty[0] = new PointF(-bokHalf, bokHalf);
+            punkty[1] = new PointF(bokHalf, bokHalf);
+            punkty[2] = new PointF(bokHalf, -bokHalf);
+            punkty[3] = new PointF(-bokHalf, -bokHalf);
+
+            Obrót(punkty, (double)m_parametryf["Obrót"]);
+            MoveXY(punkty, (float)m_parametryf["X"], (float)m_parametryf["Y"]);
+            KorektaWspółrzędnych(punkty, width, height);
+
             ////Random rnd = new Random();
             ////Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
             g.DrawPolygon(pen, punkty);
@@ -324,7 +357,6 @@ namespace Figury
         private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "R", 30 }, { "X", 0 }, { "Y", 0 } };
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
 
-        public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "R", "X", "Y" }.AsReadOnly(); } }
         public override List<decimal> GetDefaultVal { get { return [20, 0, 0]; } }
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
@@ -362,8 +394,6 @@ namespace Figury
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
         public override List<decimal> GetDefaultVal { get { return [20, 0, 0]; } }
 
-        public override ReadOnlyCollection<string> GetParamNames { get { return new List<string> { "Bok", "X", "Y", "Obrót" }.AsReadOnly(); } }
-
         public override IFigury CreateNewFig()
         {
             return new Trójkąt();
@@ -371,9 +401,6 @@ namespace Figury
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
-            float X = (float)m_parametryf["X"] + width / 2;
-            float Y = -(float)m_parametryf["Y"] + height / 2;
-
             float bok = (float)m_parametryf["Bok"];
             float h = 0.866f * bok;
 
@@ -385,9 +412,13 @@ namespace Figury
             float Y2 = h * 2 / 3;
             float Y3 = Y1;
             PointF[] punkty = new PointF[3];
-            punkty[0] = new PointF(X1 + X, Y - Y1);
-            punkty[1] = new PointF(X2 + X, Y - Y2);
-            punkty[2] = new PointF(X3 + X, Y - Y3);
+            punkty[0] = new PointF(X1, Y1);
+            punkty[1] = new PointF(X2, Y2);
+            punkty[2] = new PointF(X3, Y3);
+
+            Obrót(punkty, (double)m_parametryf["Obrót"]);
+            MoveXY(punkty, (float)m_parametryf["X"], (float)m_parametryf["Y"]);
+            KorektaWspółrzędnych(punkty, width, height);
 
             g.DrawPolygon(pen, punkty);
         }
