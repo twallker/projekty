@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection.Metadata;
 
 namespace Figury
 {
@@ -7,9 +8,9 @@ namespace Figury
     {
         private List<IFigury> dostepneFigury = [new Prostokąt(), new Kwadrat(), new Koło(), new Trójkąt()];
         private List<System.Windows.Forms.NumericUpDown> dostępneWartosci;
-        //private List<System.Windows.Forms.Label> dostępneParametry;
         private List<Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown>> dostępneKontrolki;
         private List<IFigury> figuries;
+        private Point mouseDown;
         public Form1()
         {
             InitializeComponent();
@@ -24,8 +25,49 @@ namespace Figury
             figuries = new List<IFigury>();
         }
 
+        private void PrzesunFigure(Point actualMouse)
+        {
+
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    int dx = actualMouse.X - mouseDown.X;
+                    int dy = actualMouse.Y - mouseDown.Y;
+
+                    Dictionary<string, decimal> map = f.GetParams;
+
+                    map["X"] = 10;
+                    map["Y"] = 20;
+
+                    foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
+                    {
+                        //if (para.Item1.Visible && para.Item2.Visible)
+                        //{
+                        //    wartosci.Add(para.Item1.Text, para.Item2.Value);
+                        //}
+                    }
+
+                    //foreach (var param in map)
+                    //{
+                    //    if (parametry.ContainsKey(param.Key))
+                    //    {
+                    //        GetParams[param.Key] = parametry[param.Key];
+                    //    }
+                    //    else
+                    //    {
+                    //        throw new Exception("Nie zgadzają się parametry");
+                    //        //return false;
+                    //    }
+                    //}
+
+                    f.SetParameters(map);
+                }
+            }
+        }
+
         private void AktualizujParametry2(Dictionary<string, decimal> parametry)
-        {            
+        {
             if (parametry.Count > dostępneKontrolki.Count)
             {
                 throw new InvalidOperationException("Brak miejsca na parametry");
@@ -67,7 +109,7 @@ namespace Figury
             }
         }
 
-        private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)        
+        private void zasobnikFigur_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (IFigury f in dostepneFigury)
             {
@@ -167,10 +209,39 @@ namespace Figury
                     }
                     else
                     {
-                        userFig.SelectedIndex = figuries.Count-1;
+                        userFig.SelectedIndex = figuries.Count - 1;
                     }
                     Rysuj();
                     return;
+                }
+            }
+        }
+
+        private void panelRysuj_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void panelRysuj_MouseDown(object sender, MouseEventArgs e)
+        {
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    this.Text = this.Text + "+";
+                    mouseDown = e.Location;
+                }
+            }
+        }
+
+        private void panelRysuj_MouseUp(object sender, MouseEventArgs e)
+        {
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    this.Text = this.Text + "-";
+                    PrzesunFigure(e.Location);
                 }
             }
         }
@@ -190,8 +261,6 @@ namespace Figury
         public string nazwa { get;  }
 
         public abstract Dictionary<string, decimal> GetParams { get; }
-
-        public abstract List<decimal> GetDefaultVal { get; }
 
         virtual public bool SetParameters(Dictionary<string, decimal> parametry)
         {
@@ -265,7 +334,7 @@ namespace Figury
 
     public class Prostokąt : IFigury
     {
-        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Wys", 10 }, { "Szer", 20 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };        
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Wys", 50 }, { "Szer", 100 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };        
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
 
         public override bool SetParameters(Dictionary<string, decimal> parametry)
@@ -280,8 +349,6 @@ namespace Figury
             }
             return base.SetParameters(parametry);
         }
-
-        public override List<decimal> GetDefaultVal { get { return [10, 20, 0, 0]; } }
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
@@ -310,7 +377,7 @@ namespace Figury
 
     public class Kwadrat : IFigury
     {
-        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 20 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 90 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
 
         public override bool SetParameters(Dictionary<string, decimal> parametry)
@@ -325,8 +392,6 @@ namespace Figury
             }
             return base.SetParameters(parametry);
         }
-
-        public override List<decimal> GetDefaultVal { get { return [10, 0, 0]; } }
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
@@ -354,10 +419,8 @@ namespace Figury
 
     public class Koło : IFigury
     {
-        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "R", 30 }, { "X", 0 }, { "Y", 0 } };
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "R", 120 }, { "X", 0 }, { "Y", 0 } };
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
-
-        public override List<decimal> GetDefaultVal { get { return [20, 0, 0]; } }
 
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
@@ -390,10 +453,8 @@ namespace Figury
 
     public class Trójkąt : IFigury
     {
-        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 50 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };
+        private readonly Dictionary<string, decimal> m_parametryf = new Dictionary<string, decimal> { { "Bok", 220 }, { "X", 0 }, { "Y", 0 }, { "Obrót", 0 } };
         public override Dictionary<string, decimal> GetParams { get { return m_parametryf; } }
-        public override List<decimal> GetDefaultVal { get { return [20, 0, 0]; } }
-
         public override IFigury CreateNewFig()
         {
             return new Trójkąt();

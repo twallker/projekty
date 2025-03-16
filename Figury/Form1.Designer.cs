@@ -65,6 +65,8 @@
             panelRysuj.Name = "panelRysuj";
             panelRysuj.Size = new Size(1020, 484);
             panelRysuj.TabIndex = 0;
+            panelRysuj.MouseDown += panelRysuj_MouseDown;
+            panelRysuj.MouseUp += panelRysuj_MouseUp;
             // 
             // zasobnikFigur
             // 
