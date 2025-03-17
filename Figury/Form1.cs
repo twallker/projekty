@@ -35,18 +35,53 @@ namespace Figury
                     int dx = actualMouse.X - mouseDown.X;
                     int dy = actualMouse.Y - mouseDown.Y;
 
-                    Dictionary<string, decimal> map = f.GetParams;
+                    //Dictionary<string, decimal> map = f.GetParams;
 
-                    map["X"] = 10;
-                    map["Y"] = 20;
+                    //map["X"] = 10;
+                    //map["Y"] = 20;
 
-                    foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
-                    {
-                        //if (para.Item1.Visible && para.Item2.Visible)
-                        //{
-                        //    wartosci.Add(para.Item1.Text, para.Item2.Value);
-                        //}
+                    System.Windows.Forms.NumericUpDown? X = null;
+                    System.Windows.Forms.NumericUpDown Y = null;
+                    // uaktualnij kontrolki
+                    int found = 0;
+                    //foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
+                    foreach (var para in dostępneKontrolki)
+                        {
+                        if (para.Item1.Visible && para.Item2.Visible)
+                        {
+                            if (para.Item1.Text=="X")
+                            {
+                                X = para.Item2;
+                                para.Item2.Value = 10;
+                                found++;
+                            }
+                            if (para.Item1.Text == "Y")
+                            {
+                                Y = para.Item2;
+                                para.Item2.Value = 25;
+                                found++;
+                            }
+                        }
                     }
+
+                    for (int i = 0; i < dostępneKontrolki.Count; i++)
+                    {
+                        if (dostępneKontrolki[i].Item1.Visible && dostępneKontrolki[i].Item2.Visible)
+                        {
+                            Y = dostępneKontrolki[i].Item2;// as System.Windows.Forms.NumericUpDown;
+                        }
+                    }
+                    if (found != 2) return;
+
+                    X.Value = 30;
+                    if (Y != null)
+                    {
+                        Y.Value = 50;
+                    }
+
+                    //X.Value = 20;
+                    //Y.Value = 20;
+                    // uaktualnij parametry figury
 
                     //foreach (var param in map)
                     //{
@@ -61,7 +96,7 @@ namespace Figury
                     //    }
                     //}
 
-                    f.SetParameters(map);
+                    //f.SetParameters(map);
                 }
             }
         }
