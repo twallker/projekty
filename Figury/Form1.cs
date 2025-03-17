@@ -11,6 +11,7 @@ namespace Figury
         private List<Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown>> dostępneKontrolki;
         private List<IFigury> figuries;
         private Point mouseDown;
+        private bool AktualizacjaKontrolekWłączona = false;
         public Form1()
         {
             InitializeComponent();
@@ -27,7 +28,8 @@ namespace Figury
 
         private void AktualizujParametryFiguryzKontrolekiRysuj()
         {
-            if (figuries != null)
+            //if (figuries != null)
+            if (AktualizacjaKontrolekWłączona)
             {
                 //uaktualnij parametry w figurach
                 foreach (IFigury f in figuries)
@@ -96,7 +98,9 @@ namespace Figury
                 {
                     dostępneKontrolki[i].Item1.Text = parametry.ElementAt(i).Key;
                     dostępneKontrolki[i].Item1.Visible = true;
+                    AktualizacjaKontrolekWłączona = false;
                     dostępneKontrolki[i].Item2.Value = parametry.ElementAt(i).Value;
+                    AktualizacjaKontrolekWłączona = true;
                     dostępneKontrolki[i].Item2.Visible = true;
                 }
                 else
