@@ -27,22 +27,25 @@ namespace Figury
 
         private void AktualizujParametryFiguryzKontrolekiRysuj()
         {
-            //uaktualnij parametry w figurach
-            foreach (IFigury f in figuries)
+            if (figuries != null)
             {
-                if (userFig.Text == f.nazwa + "_" + f.id)
+                //uaktualnij parametry w figurach
+                foreach (IFigury f in figuries)
                 {
-                    Dictionary<string, decimal> wartosci = new Dictionary<string, decimal>();
-                    foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
+                    if (userFig.Text == f.nazwa + "_" + f.id)
                     {
-                        if (para.Item1.Visible && para.Item2.Visible)
+                        Dictionary<string, decimal> wartosci = new Dictionary<string, decimal>();
+                        foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
                         {
-                            wartosci.Add(para.Item1.Text, para.Item2.Value);
+                            if (para.Item1.Visible && para.Item2.Visible)
+                            {
+                                wartosci.Add(para.Item1.Text, para.Item2.Value);
+                            }
                         }
+                        f.SetParameters(wartosci);
+                        Rysuj();
+                        return;
                     }
-                    f.SetParameters(wartosci);
-                    Rysuj();
-                    return;
                 }
             }
         }
@@ -188,11 +191,6 @@ namespace Figury
             }
         }
 
-        private void Aktualizuj_Click(object sender, EventArgs e)
-        {
-            AktualizujParametryFiguryzKontrolekiRysuj();
-        }
-
         private void Usuń_Click(object sender, EventArgs e)
         {
             foreach (IFigury f in figuries)
@@ -246,6 +244,11 @@ namespace Figury
             //AktualizujParametryFiguryzKontrolekiRysuj();
             PrzesunFigure(MousePosition);
             mouseDown = MousePosition;
+        }
+
+        private void v0_ValueChanged(object sender, EventArgs e)
+        {
+            AktualizujParametryFiguryzKontrolekiRysuj();
         }
     }
     public abstract class IFigury

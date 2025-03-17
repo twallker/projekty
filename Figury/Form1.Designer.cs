@@ -50,7 +50,6 @@
             label8 = new Label();
             userFig = new ComboBox();
             Usuń = new Button();
-            Aktualizuj = new Button();
             CykliczneRysowanieFigur = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)v0).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v1).BeginInit();
@@ -119,6 +118,7 @@
             v0.Size = new Size(56, 23);
             v0.TabIndex = 5;
             v0.Visible = false;
+            v0.ValueChanged += v0_ValueChanged;
             // 
             // v1
             // 
@@ -129,6 +129,7 @@
             v1.Size = new Size(56, 23);
             v1.TabIndex = 7;
             v1.Visible = false;
+            v1.ValueChanged += v0_ValueChanged;
             // 
             // p1
             // 
@@ -149,6 +150,7 @@
             v3.Size = new Size(56, 23);
             v3.TabIndex = 11;
             v3.Visible = false;
+            v3.ValueChanged += v0_ValueChanged;
             // 
             // p3
             // 
@@ -169,6 +171,7 @@
             v2.Size = new Size(56, 23);
             v2.TabIndex = 9;
             v2.Visible = false;
+            v2.ValueChanged += v0_ValueChanged;
             // 
             // p2
             // 
@@ -189,6 +192,7 @@
             v5.Size = new Size(56, 23);
             v5.TabIndex = 15;
             v5.Visible = false;
+            v5.ValueChanged += v0_ValueChanged;
             // 
             // p5
             // 
@@ -209,6 +213,7 @@
             v4.Size = new Size(56, 23);
             v4.TabIndex = 13;
             v4.Visible = false;
+            v4.ValueChanged += v0_ValueChanged;
             // 
             // p4
             // 
@@ -229,6 +234,7 @@
             v6.Size = new Size(56, 23);
             v6.TabIndex = 17;
             v6.Visible = false;
+            v6.ValueChanged += v0_ValueChanged;
             // 
             // p6
             // 
@@ -269,16 +275,6 @@
             Usuń.UseVisualStyleBackColor = true;
             Usuń.Click += Usuń_Click;
             // 
-            // Aktualizuj
-            // 
-            Aktualizuj.Location = new Point(327, 33);
-            Aktualizuj.Name = "Aktualizuj";
-            Aktualizuj.Size = new Size(75, 23);
-            Aktualizuj.TabIndex = 20;
-            Aktualizuj.Text = "Aktualizuj";
-            Aktualizuj.UseVisualStyleBackColor = true;
-            Aktualizuj.Click += Aktualizuj_Click;
-            // 
             // CykliczneRysowanieFigur
             // 
             CykliczneRysowanieFigur.Interval = 400;
@@ -289,7 +285,6 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1044, 584);
-            Controls.Add(Aktualizuj);
             Controls.Add(Usuń);
             Controls.Add(label8);
             Controls.Add(userFig);
@@ -347,7 +342,6 @@
         private Label label8;
         private ComboBox userFig;
         private Button Usuń;
-        private Button Aktualizuj;
         private System.Windows.Forms.Timer CykliczneRysowanieFigur;
     }
 }
