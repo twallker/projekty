@@ -434,11 +434,11 @@ namespace Figury
         public override void Rysuj(Graphics g, int width, int height, Pen pen)
         {
             float R = (float)m_parametryf["R"];
-            float X = (float)m_parametryf["X"] + width / 2 - R;
-            float Y = -(float)m_parametryf["Y"] + height / 2 - R;
-            ////Random rnd = new Random();
-            ////Point[] points={ new Point(0, 0), new Point(rnd.Next(10,30), rnd.Next(10,30)) };
-            g.DrawEllipse(pen, X, Y, 2 * R, 2 * R);
+            PointF[] punkty = new PointF[] { new PointF(-R, R) };
+
+            MoveXY(punkty, (float)m_parametryf["X"], (float)m_parametryf["Y"]);
+            KorektaWspółrzędnych(punkty, width, height);
+            g.DrawEllipse(pen, punkty[0].X, punkty[0].Y, 2 * R, 2 * R);
         }
 
         public override bool SetParameters(Dictionary<string, decimal> parametry)
