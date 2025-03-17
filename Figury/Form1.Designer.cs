@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panelRysuj = new Panel();
             zasobnikFigur = new ComboBox();
             label1 = new Label();
@@ -50,6 +51,7 @@
             userFig = new ComboBox();
             Usuń = new Button();
             Aktualizuj = new Button();
+            CykliczneRysowanieFigur = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)v0).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)v3).BeginInit();
@@ -277,6 +279,11 @@
             Aktualizuj.UseVisualStyleBackColor = true;
             Aktualizuj.Click += Aktualizuj_Click;
             // 
+            // CykliczneRysowanieFigur
+            // 
+            CykliczneRysowanieFigur.Interval = 400;
+            CykliczneRysowanieFigur.Tick += CykliczneRysowanieFigur_Tick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -341,5 +348,6 @@
         private ComboBox userFig;
         private Button Usuń;
         private Button Aktualizuj;
+        private System.Windows.Forms.Timer CykliczneRysowanieFigur;
     }
 }

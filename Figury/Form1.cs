@@ -25,6 +25,28 @@ namespace Figury
             figuries = new List<IFigury>();
         }
 
+        private void AktualizujParametryFiguryzKontrolekiRysuj()
+        {
+            //uaktualnij parametry w figurach
+            foreach (IFigury f in figuries)
+            {
+                if (userFig.Text == f.nazwa + "_" + f.id)
+                {
+                    Dictionary<string, decimal> wartosci = new Dictionary<string, decimal>();
+                    foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
+                    {
+                        if (para.Item1.Visible && para.Item2.Visible)
+                        {
+                            wartosci.Add(para.Item1.Text, para.Item2.Value);
+                        }
+                    }
+                    f.SetParameters(wartosci);
+                    Rysuj();
+                    return;
+                }
+            }
+        }
+
         private void PrzesunFigure(Point actualMouse)
         {
 
@@ -35,73 +57,31 @@ namespace Figury
                     int dx = actualMouse.X - mouseDown.X;
                     int dy = actualMouse.Y - mouseDown.Y;
 
-                    //Dictionary<string, decimal> map = f.GetParams;
-
-                    //map["X"] = 10;
-                    //map["Y"] = 20;
-
-                    System.Windows.Forms.NumericUpDown? X = null;
-                    System.Windows.Forms.NumericUpDown Y = null;
-                    // uaktualnij kontrolki
-                    int found = 0;
-                    //foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
-                    foreach (var para in dostępneKontrolki)
-                        {
-                        if (para.Item1.Visible && para.Item2.Visible)
-                        {
-                            if (para.Item1.Text=="X")
-                            {
-                                X = para.Item2;
-                                para.Item2.Value = 10;
-                                found++;
-                            }
-                            if (para.Item1.Text == "Y")
-                            {
-                                Y = para.Item2;
-                                para.Item2.Value = 25;
-                                found++;
-                            }
-                        }
-                    }
-
+                    int x = -1;
+                    int y = -1;
                     for (int i = 0; i < dostępneKontrolki.Count; i++)
                     {
-                        if (dostępneKontrolki[i].Item1.Visible && dostępneKontrolki[i].Item2.Visible)
+                        if (dostępneKontrolki[i].Item1.Visible && dostępneKontrolki[i].Item2.Visible && dostępneKontrolki[i].Item1.Text == "X")
                         {
-                            Y = dostępneKontrolki[i].Item2;// as System.Windows.Forms.NumericUpDown;
+                            x = i;
+                        }
+                        if (dostępneKontrolki[i].Item1.Visible && dostępneKontrolki[i].Item2.Visible && dostępneKontrolki[i].Item1.Text == "Y")
+                        {
+                            y = i;
                         }
                     }
-                    if (found != 2) return;
+                    if (x == -1 || y == -1) return;
 
-                    X.Value = 30;
-                    if (Y != null)
-                    {
-                        Y.Value = 50;
-                    }
+                    // uaktualnij kontrolki, są obie warttośći X i Y
+                    dostępneKontrolki[x].Item2.Value += dx;
+                    dostępneKontrolki[y].Item2.Value -= dy;
 
-                    //X.Value = 20;
-                    //Y.Value = 20;
-                    // uaktualnij parametry figury
-
-                    //foreach (var param in map)
-                    //{
-                    //    if (parametry.ContainsKey(param.Key))
-                    //    {
-                    //        GetParams[param.Key] = parametry[param.Key];
-                    //    }
-                    //    else
-                    //    {
-                    //        throw new Exception("Nie zgadzają się parametry");
-                    //        //return false;
-                    //    }
-                    //}
-
-                    //f.SetParameters(map);
+                    AktualizujParametryFiguryzKontrolekiRysuj();
                 }
             }
         }
 
-        private void AktualizujParametry2(Dictionary<string, decimal> parametry)
+        private void PokazParametryFigury(Dictionary<string, decimal> parametry)
         {
             if (parametry.Count > dostępneKontrolki.Count)
             {
@@ -127,6 +107,7 @@ namespace Figury
 
         private void Rysuj()
         {
+            if (figuries.Count <= 0) return;
             Graphics g = panelRysuj.CreateGraphics();
             g.Clear(BackColor);
             foreach (IFigury f in figuries)
@@ -150,7 +131,7 @@ namespace Figury
             {
                 if (f.nazwa == zasobnikFigur.Text)
                 {
-                    AktualizujParametry2(f.GetParams);
+                    PokazParametryFigury(f.GetParams);
                     return;
                 }
             }
@@ -200,7 +181,7 @@ namespace Figury
                 if (userFig.Text == f.nazwa + "_" + f.id)
                 {
                     zasobnikFigur.Text = f.nazwa;
-                    AktualizujParametry2(f.GetParams);
+                    PokazParametryFigury(f.GetParams);
                     Rysuj();
                     return;
                 }
@@ -209,24 +190,7 @@ namespace Figury
 
         private void Aktualizuj_Click(object sender, EventArgs e)
         {
-            //uaktualnij parametry w figurach
-            foreach (IFigury f in figuries)
-            {
-                if (userFig.Text == f.nazwa + "_" + f.id)
-                {
-                    Dictionary<string, decimal> wartosci = new Dictionary<string, decimal>();
-                    foreach (Tuple<System.Windows.Forms.Label, System.Windows.Forms.NumericUpDown> para in dostępneKontrolki)
-                    {
-                        if (para.Item1.Visible && para.Item2.Visible)
-                        {
-                            wartosci.Add(para.Item1.Text, para.Item2.Value);
-                        }
-                    }
-                    f.SetParameters(wartosci);
-                    Rysuj();
-                    return;
-                }
-            }
+            AktualizujParametryFiguryzKontrolekiRysuj();
         }
 
         private void Usuń_Click(object sender, EventArgs e)
@@ -252,19 +216,15 @@ namespace Figury
             }
         }
 
-        private void panelRysuj_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void panelRysuj_MouseDown(object sender, MouseEventArgs e)
         {
             foreach (IFigury f in figuries)
             {
                 if (userFig.Text == f.nazwa + "_" + f.id)
                 {
-                    this.Text = this.Text + "+";
-                    mouseDown = e.Location;
+                    //mouseDown = e.Location;
+                    mouseDown = MousePosition;
+                    CykliczneRysowanieFigur.Start();
                 }
             }
         }
@@ -275,10 +235,17 @@ namespace Figury
             {
                 if (userFig.Text == f.nazwa + "_" + f.id)
                 {
-                    this.Text = this.Text + "-";
-                    PrzesunFigure(e.Location);
+                    CykliczneRysowanieFigur.Stop();
+                    PrzesunFigure(MousePosition);
                 }
             }
+        }
+
+        private void CykliczneRysowanieFigur_Tick(object sender, EventArgs e)
+        {
+            //AktualizujParametryFiguryzKontrolekiRysuj();
+            PrzesunFigure(MousePosition);
+            mouseDown = MousePosition;
         }
     }
     public abstract class IFigury
@@ -349,7 +316,7 @@ namespace Figury
             for (int i = 0; i < punkty.Length; i++)
             {
                 punkty[i].X += x;
-                punkty[i].Y -= y;
+                punkty[i].Y += y;
             }
         }
 
