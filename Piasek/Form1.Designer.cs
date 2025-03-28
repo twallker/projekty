@@ -31,6 +31,7 @@
             button1 = new Button();
             obraz = new Panel();
             textBox1 = new TextBox();
+            krok = new Button();
             SuspendLayout();
             // 
             // button1
@@ -58,11 +59,22 @@
             textBox1.Size = new Size(132, 23);
             textBox1.TabIndex = 2;
             // 
+            // krok
+            // 
+            krok.Location = new Point(591, 41);
+            krok.Name = "krok";
+            krok.Size = new Size(75, 23);
+            krok.TabIndex = 3;
+            krok.Text = "Krok";
+            krok.UseVisualStyleBackColor = true;
+            krok.Click += krok_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(krok);
             Controls.Add(textBox1);
             Controls.Add(obraz);
             Controls.Add(button1);
@@ -78,5 +90,6 @@
         private Button button1;
         private Panel obraz;
         private TextBox textBox1;
+        private Button krok;
     }
 }
